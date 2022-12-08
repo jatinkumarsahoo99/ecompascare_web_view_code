@@ -1,4 +1,4 @@
-package com.example.base_flutter
+package com.example.ecompass
 
 import io.flutter.embedding.android.FlutterActivity
 

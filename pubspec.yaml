@@ -24,6 +24,7 @@ dependencies:
   graphics:
     path: packages/graphics
   webview_flutter: ^3.0.4
+  geolocator: ^9.0.2
 
 dev_dependencies:
   flutter_lints: ^2.0.0
