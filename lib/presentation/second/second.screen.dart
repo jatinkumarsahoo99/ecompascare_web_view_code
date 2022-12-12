@@ -13,7 +13,7 @@ class SecondScreen extends GetView<SecondController> {
         title: const Text('SecondScreen'),
         centerTitle: true,
       ),
-      body: Center(
+      body: const Center(
         child: Text(
           'SecondScreen is working',
           style: TextStyle(fontSize: 20),
