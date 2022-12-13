@@ -24,7 +24,10 @@ dependencies:
   graphics:
     path: packages/graphics
   webview_flutter: ^3.0.4
+
+  #other
   geolocator: ^9.0.2
+  # flutter_launcher_icons: ^0.11.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -35,3 +38,16 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # flutter_icons:
+  #   android: true
+  #   ios: true
+  #   remove_alpha_ios: true
+  #   image_path: "assets/extras/icon.png"
+  #   adaptive_icon_background: #ffffff
+  #   adaptive_icon_foreground: #ffffff
+
+  assets:
+    - assets/png/
+    - assets/svg/
+    - assets/jpg/

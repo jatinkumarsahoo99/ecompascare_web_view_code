@@ -7,6 +7,17 @@ import 'package:get/get.dart';
 
 class HomeController extends GetxController with NetworkStateMixin1 {
   late LocationPermission permission;
+
+  final RxBool splashBool = true.obs;
+
+  void splashTimer() async {
+    await Future.delayed(const Duration(milliseconds: 1500)).then(
+      (value) {
+        splashBool.value = false;
+      },
+    );
+  }
+
   testApiCall() async {
     ///Need to put all the places await where needed
     await networkObserver1(() async {
@@ -27,6 +38,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
 
   @override
   void onInit() {
+    splashTimer();
     super.onInit();
   }
 

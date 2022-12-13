@@ -1,2 +1,2 @@
 export 'package:base_flutter/infrastructure/navigation/bindings/controllers/home.controller.binding.dart';
-export 'package:base_flutter/infrastructure/navigation/bindings/controllers/second.controller.binding.dart'; 
+export 'package:base_flutter/infrastructure/navigation/bindings/controllers/second.controller.binding.dart';
