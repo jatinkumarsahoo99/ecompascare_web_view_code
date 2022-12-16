@@ -15,45 +15,52 @@ class HomeScreen extends GetView<HomeController> {
       body: Obx(
         () {
           return controller.splashBool.value
-              ? Center(
-                  child: Image.asset(AssetConsts.splash),
-                )
+              ? Center(child: Image.asset(AssetConsts.splash))
               : Column(
                   children: [
-                    const SizedBox(height: 35),
+                    const SizedBox(height: 33),
+                    LinearProgressIndicator(
+                      value: controller.progress.value.toDouble(),
+                      backgroundColor: Colors.blue,
+                      valueColor: const AlwaysStoppedAnimation(Colors.white),
+                      minHeight: 2,
+                    ),
                     Expanded(
-                      child: WebView(
-                        initialUrl:
-                            'https://craftercms-delivery-dev.skill-mine.com/?crafterSite=ecompasscaredev',
-                        javascriptMode: JavascriptMode.unrestricted,
-                        javascriptChannels: <JavascriptChannel>{
-                          JavascriptChannel(
-                            name: 'Print',
-                            onMessageReceived: (JavascriptMessage msg) {
-                              debugPrint(msg.message);
-                              if (msg.message == 'Hello!') {
-                                Get.toNamed(Routes.SECOND);
-                              }
-                            },
-                          ),
-                        },
-                        // onProgress: (progress) {
-                        //   if (progress != 100) {
-                        //     _progress.value = true;
-                        //   }
-                        // },
-                        // onWebViewCreated: (controller) {
-                        //   _controller = controller;
-                        // },
-                        // onPageFinished: (finish) async {
-                        //   final response = await _controller.runJavascriptReturningResult(
-                        //       "document.documentElement.innerText");
-                        //   if (response.contains('We are sorry but the transaction failed.')) {
-                        //     debugPrint('statement1');
-                        //   } else if (response.contains('Payment Successful')) {
-                        //     debugPrint('statement2');
-                        //   }
-                        // },
+                      child: Opacity(
+                        opacity: controller.isInitialLoaded.value ? 1 : 0.5,
+                        child: WebView(
+                          initialUrl:
+                              'https://craftercms-delivery-dev.skill-mine.com/?crafterSite=ecompasscaredev',
+                          javascriptMode: JavascriptMode.unrestricted,
+                          javascriptChannels: <JavascriptChannel>{
+                            JavascriptChannel(
+                              name: 'Print',
+                              onMessageReceived: (JavascriptMessage msg) {
+                                debugPrint(msg.message);
+                                if (msg.message == 'Hello!') {
+                                  Get.toNamed(Routes.SECOND);
+                                }
+                              },
+                            ),
+                          },
+                          onPageFinished: (String url) {
+                            if (!controller.isInitialLoaded.value) {
+                              controller.isInitialLoaded.value = true;
+                            }
+                          },
+                          onProgress: (progress) {
+                            controller.progress.value = progress;
+                          },
+                          // onPageFinished: (finish) async {
+                          //   final response = await _controller.runJavascriptReturningResult(
+                          //       "document.documentElement.innerText");
+                          //   if (response.contains('We are sorry but the transaction failed.')) {
+                          //     debugPrint('statement1');
+                          //   } else if (response.contains('Payment Successful')) {
+                          //     debugPrint('statement2');
+                          //   }
+                          // },
+                        ),
                       ),
                     ),
                   ],

@@ -10,6 +10,10 @@ class HomeController extends GetxController with NetworkStateMixin1 {
 
   final RxBool splashBool = true.obs;
 
+  ///Test
+  final isInitialLoaded = false.obs;
+  final RxInt progress = 0.obs;
+
   void splashTimer() async {
     await Future.delayed(const Duration(milliseconds: 1500)).then(
       (value) {
