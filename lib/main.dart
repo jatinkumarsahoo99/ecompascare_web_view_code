@@ -1,5 +1,5 @@
-import 'package:base_flutter/infrastructure/config.dart';
-import 'package:base_flutter/infrastructure/theme/themes.dart';
+import 'package:ecompasscare/infrastructure/config.dart';
+import 'package:ecompasscare/infrastructure/theme/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'infrastructure/initialize_app.dart';

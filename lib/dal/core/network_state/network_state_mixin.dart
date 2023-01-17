@@ -1,4 +1,4 @@
-import 'package:base_flutter/dal/core/network_response/network_response.dart';
+import 'package:ecompasscare/dal/core/network_response/network_response.dart';
 import 'package:get/get.dart';
 
 ///This enum is for Network State of a particular api call

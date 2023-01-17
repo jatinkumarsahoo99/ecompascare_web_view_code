@@ -1,10 +1,10 @@
 import 'dart:developer';
-import 'package:base_flutter/infrastructure/config.dart';
+import 'package:ecompasscare/infrastructure/config.dart';
 import 'package:dio/dio.dart';
 import 'interfaces/i_remote_db.dart';
 import 'local_storage.dart';
 
-export 'package:base_flutter/dal/core/extentions/response_to_map.dart';
+export 'package:ecompasscare/dal/core/extentions/response_to_map.dart';
 
 enum _RestApiMethod { get, put, post, patch, delete }
 

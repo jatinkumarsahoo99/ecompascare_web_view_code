@@ -1,5 +1,5 @@
-import 'package:base_flutter/infrastructure/consts/asset_consts.dart';
-import 'package:base_flutter/infrastructure/navigation/routes.dart';
+import 'package:ecompasscare/infrastructure/consts/asset_consts.dart';
+import 'package:ecompasscare/infrastructure/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';

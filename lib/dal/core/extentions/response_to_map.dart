@@ -1,4 +1,4 @@
-import 'package:base_flutter/dal/core/network_response/network_response.dart';
+import 'package:ecompasscare/dal/core/network_response/network_response.dart';
 import 'package:dio/dio.dart';
 
 ///This extension is for enhancing the existing class [Response] class

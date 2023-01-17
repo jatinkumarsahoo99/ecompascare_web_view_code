@@ -1,4 +1,4 @@
-import 'package:base_flutter/dal/services/interfaces/i_internet_connection_manager.dart';
+import 'package:ecompasscare/dal/services/interfaces/i_internet_connection_manager.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 

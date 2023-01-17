@@ -1,5 +1,5 @@
-import 'package:base_flutter/dal/core/network_response/network_response.dart';
-import 'package:base_flutter/dal/services/internet_connection_manager.dart';
+import 'package:ecompasscare/dal/core/network_response/network_response.dart';
+import 'package:ecompasscare/dal/services/internet_connection_manager.dart';
 import 'package:objectbox/objectbox.dart';
 
 ///TODO: Check this file only if you need to use local database

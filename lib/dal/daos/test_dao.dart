@@ -1,7 +1,7 @@
-import 'package:base_flutter/dal/core/network_response/network_response.dart';
-import 'package:base_flutter/dal/daos/interfaces/i_account_dao.dart';
-import 'package:base_flutter/dal/services/remote_db.dart';
-import 'package:base_flutter/domain/entity/accounts/test_response.dart';
+import 'package:ecompasscare/dal/core/network_response/network_response.dart';
+import 'package:ecompasscare/dal/daos/interfaces/i_account_dao.dart';
+import 'package:ecompasscare/dal/services/remote_db.dart';
+import 'package:ecompasscare/domain/entity/accounts/test_response.dart';
 import 'package:dio/dio.dart';
 
 class TestDao implements ITestDao {

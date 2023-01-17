@@ -1,6 +1,6 @@
-import 'package:base_flutter/dal/core/network_response/network_response.dart';
-import 'package:base_flutter/dal/core/network_state/network_state_mixin.dart';
-import 'package:base_flutter/infrastructure/widgets/show_snackbar.dart';
+import 'package:ecompasscare/dal/core/network_response/network_response.dart';
+import 'package:ecompasscare/dal/core/network_state/network_state_mixin.dart';
+import 'package:ecompasscare/infrastructure/widgets/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -1,6 +1,6 @@
-import 'package:base_flutter/dal/services/internet_connection_manager.dart';
-import 'package:base_flutter/dal/services/local_db.dart';
-import 'package:base_flutter/dal/services/local_storage.dart';
+import 'package:ecompasscare/dal/services/internet_connection_manager.dart';
+import 'package:ecompasscare/dal/services/local_db.dart';
+import 'package:ecompasscare/dal/services/local_storage.dart';
 
 // late LocalDB localDB;
 

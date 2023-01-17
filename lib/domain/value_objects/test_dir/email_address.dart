@@ -1,4 +1,4 @@
-import 'package:base_flutter/domain/core/value_object.dart';
+import 'package:ecompasscare/domain/core/value_object.dart';
 
 class EmailAddress extends ValueObject<String> {
   EmailAddress(super.value);
