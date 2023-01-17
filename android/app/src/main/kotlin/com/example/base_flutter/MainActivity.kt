@@ -1,4 +1,4 @@
-package com.example.ecompass
+package com.skillmine.ecompass
 
 import io.flutter.embedding.android.FlutterActivity
 

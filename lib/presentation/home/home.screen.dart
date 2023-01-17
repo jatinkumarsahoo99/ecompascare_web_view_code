@@ -2,6 +2,7 @@ import 'package:base_flutter/infrastructure/consts/asset_consts.dart';
 import 'package:base_flutter/infrastructure/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'controllers/home.controller.dart';
 
@@ -10,27 +11,41 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Obx(
-        () {
-          return controller.splashBool.value
-              ? Center(child: Image.asset(AssetConsts.splash))
+    return Obx(
+      () {
+        return Scaffold(
+          backgroundColor: controller.splashBool.value
+              ? const Color(0xff6C3F94)
+              : Colors.white,
+          body: controller.splashBool.value
+              ? Column(
+                  children: [
+                    Expanded(
+                      child: Lottie.asset(
+                        AssetConsts.lottieSplash,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ],
+                )
               : Column(
                   children: [
-                    const SizedBox(height: 33),
-                    LinearProgressIndicator(
-                      value: controller.progress.value.toDouble(),
-                      backgroundColor: Colors.blue,
-                      valueColor: const AlwaysStoppedAnimation(Colors.white),
-                      minHeight: 2,
-                    ),
+                    const SizedBox(height: 35),
+                    // LinearProgressIndicator(
+                    //   value: controller.progress.value.toDouble(),
+                    //   backgroundColor: Colors.blue,
+                    //   valueColor: const AlwaysStoppedAnimation(Colors.white),
+                    //   minHeight: 2,
+                    // ),
                     Expanded(
                       child: Opacity(
                         opacity: controller.isInitialLoaded.value ? 1 : 0.5,
                         child: WebView(
                           initialUrl:
-                              'https://craftercms-delivery-dev.skill-mine.com/?crafterSite=ecompasscaredev',
+                              // 'https://craftercms-delivery-dev.skill-mine.com/?crafterSite=ecompasscaredev',
+                              // 'https://craftercms-delivery-dev.skill-mine.com/?crafterSite=ecompaascare-dev-int-sprint6',
+                              // 'https://craftercms-delivery-dev.skill-mine.com/?crafterSite=ecompaascare-dev-int-sprint6_v2',
+                              'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?crafterSite=ecompaascare-dev-int-sprint6_v2',
                           javascriptMode: JavascriptMode.unrestricted,
                           javascriptChannels: <JavascriptChannel>{
                             JavascriptChannel(
@@ -64,9 +79,9 @@ class HomeScreen extends GetView<HomeController> {
                       ),
                     ),
                   ],
-                );
-        },
-      ),
+                ),
+        );
+      },
     );
   }
 }

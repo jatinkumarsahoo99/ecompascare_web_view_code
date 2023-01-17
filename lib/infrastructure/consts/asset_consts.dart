@@ -7,4 +7,7 @@ class AssetConsts {
 
   ///jpg / jpeg
 
+  ///lottie
+  static const lottieSplash = 'assets/lottie/lottieSplash.json';
+  static const lottieSplash1 = 'assets/lottie/lottieSplash1.json';
 }

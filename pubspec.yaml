@@ -17,16 +17,17 @@ dependencies:
 
   #For local db/storage/cache management
   shared_preferences: ^2.0.15
-  objectbox: ^1.6.2
-  objectbox_flutter_libs: any
+  # objectbox: ^1.6.2
+  # objectbox_flutter_libs: any
 
   #local
-  graphics:
-    path: packages/graphics
+  # graphics:
+  #   path: packages/graphics
 
   #other
   webview_flutter: ^3.0.4
   geolocator: ^9.0.2
+  lottie: ^2.2.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -42,3 +43,4 @@ flutter:
     - assets/png/
     - assets/svg/
     - assets/jpg/
+    - assets/lottie/
