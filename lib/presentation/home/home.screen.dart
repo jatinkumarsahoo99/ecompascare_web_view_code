@@ -1,5 +1,4 @@
 import 'package:ecompasscare/infrastructure/consts/asset_consts.dart';
-import 'package:ecompasscare/infrastructure/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -24,6 +23,7 @@ class HomeScreen extends GetView<HomeController> {
                       child: Lottie.asset(
                         AssetConsts.lottieSplash,
                         fit: BoxFit.fill,
+                        repeat: false,
                       ),
                     ),
                   ],
@@ -42,30 +42,27 @@ class HomeScreen extends GetView<HomeController> {
                         opacity: controller.isInitialLoaded.value ? 1 : 0.5,
                         child: WebView(
                           initialUrl:
-                              // 'https://craftercms-delivery-dev.skill-mine.com/?crafterSite=ecompasscaredev',
-                              // 'https://craftercms-delivery-dev.skill-mine.com/?crafterSite=ecompaascare-dev-int-sprint6',
-                              // 'https://craftercms-delivery-dev.skill-mine.com/?crafterSite=ecompaascare-dev-int-sprint6_v2',
-                              'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?crafterSite=ecompaascare-dev-int-sprint6_v2',
+                              'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?crafterSite=main2v4',
                           javascriptMode: JavascriptMode.unrestricted,
-                          javascriptChannels: <JavascriptChannel>{
-                            JavascriptChannel(
-                              name: 'Print',
-                              onMessageReceived: (JavascriptMessage msg) {
-                                debugPrint(msg.message);
-                                if (msg.message == 'Hello!') {
-                                  Get.toNamed(Routes.SECOND);
-                                }
-                              },
-                            ),
-                          },
                           onPageFinished: (String url) {
                             if (!controller.isInitialLoaded.value) {
                               controller.isInitialLoaded.value = true;
                             }
                           },
-                          onProgress: (progress) {
-                            controller.progress.value = progress;
-                          },
+                          // onProgress: (progress) {
+                          //   controller.progress.value = progress;
+                          // },
+                          // javascriptChannels: <JavascriptChannel>{
+                          //   JavascriptChannel(
+                          //     name: 'Print',
+                          //     onMessageReceived: (JavascriptMessage msg) {
+                          //       debugPrint(msg.message);
+                          //       if (msg.message == 'Hello!') {
+                          //         Get.toNamed(Routes.SECOND);
+                          //       }
+                          //     },
+                          //   ),
+                          // },
                           // onPageFinished: (finish) async {
                           //   final response = await _controller.runJavascriptReturningResult(
                           //       "document.documentElement.innerText");
