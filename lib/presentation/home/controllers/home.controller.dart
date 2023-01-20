@@ -17,6 +17,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       (value) {
         splashBool.value = false;
         // player.stop();
+        getLocation();
       },
     );
   }
@@ -44,17 +45,6 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     splashTimer();
     playSound();
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    getLocation();
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 }
 
