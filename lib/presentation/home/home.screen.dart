@@ -20,6 +20,7 @@ class HomeScreen extends GetView<HomeController> {
                       AssetConsts.lottieSplash,
                       fit: BoxFit.fill,
                       repeat: false,
+                      alignment: Alignment.center,
                     ),
                   ),
                 ],
@@ -47,8 +48,9 @@ class HomeScreen extends GetView<HomeController> {
                           opacity: controller.isInitialLoaded.value ? 1 : 0.5,
                           child: WebView(
                             initialUrl:
-                                'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?crafterSite=main2v4',
+                                'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?is_app=true',
                             javascriptMode: JavascriptMode.unrestricted,
+                            zoomEnabled: false,
                             onPageFinished: (String url) {
                               if (!controller.isInitialLoaded.value) {
                                 controller.isInitialLoaded.value = true;

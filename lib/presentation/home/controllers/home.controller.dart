@@ -38,6 +38,12 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     } catch (e) {
       debugPrint(e.toString());
     }
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
+      Position loc;
+      loc = await Geolocator.getCurrentPosition();
+      debugPrint(loc.toString());
+    }
   }
 
   @override
