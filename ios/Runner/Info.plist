@@ -32,6 +32,12 @@
 	<string>This app needs access to location when open.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to location when in the background.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to photo library to upload profile pic.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs access to camera to upload profile pic.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs access to camera to upload profile pic.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
