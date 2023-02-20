@@ -39,11 +39,15 @@ class HomeScreen extends GetView<HomeController> {
               ? Column(
                   children: [
                     Expanded(
-                      child: Lottie.asset(
-                        AssetConsts.lottieSplash,
-                        fit: BoxFit.fill,
-                        repeat: false,
-                        alignment: Alignment.center,
+                      child: SizedBox(
+                        height: Get.height,
+                        width: Get.width,
+                        child: Lottie.asset(
+                          AssetConsts.lottieSplash,
+                          fit: BoxFit.fill,
+                          repeat: false,
+                          alignment: Alignment.center,
+                        ),
                       ),
                     ),
                   ],
