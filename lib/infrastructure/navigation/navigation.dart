@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
+
 import '../../presentation/screens.dart';
 import '../config.dart';
 import 'bindings/controllers/controllers_bindings.dart';
@@ -28,6 +30,11 @@ class Nav {
       name: Routes.HOME,
       page: () => const HomeScreen(),
       binding: HomeControllerBinding(),
+    ),
+    GetPage(
+      name: Routes.SPLASH,
+      page: () => const SplashScreen(),
+      binding: SplashControllerBinding(),
     ),
   ];
 }
