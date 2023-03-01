@@ -6,7 +6,6 @@ import 'infrastructure/navigation/routes.dart';
 void main() async {
   var initialRoute = await Routes.initialRoute;
   // WidgetsFlutterBinding.ensureInitialized();
-  ///REMEMBER: set proper environment here before deploy
   // ConfigEnvironments.currentEnvironments = Environments.LOCAL;
   // await initializeApp();
   runApp(Main(initialRoute));
