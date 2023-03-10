@@ -21,6 +21,12 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     }
   }
 
+  // getCookie() async {
+  //   cookies = await _webViewController.runJavascriptReturningResult(
+  //     'document.cookie',
+  //   );
+  // }
+
   @override
   void onInit() {
     getLocation();

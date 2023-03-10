@@ -55,29 +55,6 @@ class HomeScreen extends GetView<HomeController> {
                           controller.isInitialLoaded.value = true;
                         }
                       },
-                      // onProgress: (progress) {
-                      //   controller.progress.value = progress;
-                      // },
-                      // javascriptChannels: <JavascriptChannel>{
-                      //   JavascriptChannel(
-                      //     name: 'Print',
-                      //     onMessageReceived: (JavascriptMessage msg) {
-                      //       debugPrint(msg.message);
-                      //       if (msg.message == 'Hello!') {
-                      //         Get.toNamed(Routes.SECOND);
-                      //       }
-                      //     },
-                      //   ),
-                      // },
-                      // onPageFinished: (finish) async {
-                      //   final response = await _controller.runJavascriptReturningResult(
-                      //       "document.documentElement.innerText");
-                      //   if (response.contains('We are sorry but the transaction failed.')) {
-                      //     debugPrint('statement1');
-                      //   } else if (response.contains('Payment Successful')) {
-                      //     debugPrint('statement2');
-                      //   }
-                      // },
                     ),
                   ),
                 );

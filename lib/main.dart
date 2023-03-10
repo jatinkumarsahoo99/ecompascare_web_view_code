@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'infrastructure/navigation/navigation.dart';
 import 'infrastructure/navigation/routes.dart';
@@ -9,6 +10,9 @@ void main() async {
   // ConfigEnvironments.currentEnvironments = Environments.LOCAL;
   // await initializeApp();
   runApp(Main(initialRoute));
+  SystemChrome.setPreferredOrientations(
+    [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
+  );
 }
 
 class Main extends StatelessWidget {
