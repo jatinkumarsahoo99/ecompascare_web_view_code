@@ -42,12 +42,9 @@ class HomeScreen extends GetView<HomeController> {
           child: Column(
             children: [
               // Obx(() => Text('Cookies== ${controller.testCookies.value}')),
-              Obx(() {
-                return Expanded(
-                  child:
-                      WebViewWidget(controller: controller.webViewController),
-                );
-              }),
+              Expanded(
+                child: WebViewWidget(controller: controller.webViewController),
+              ),
             ],
           ),
         ),
