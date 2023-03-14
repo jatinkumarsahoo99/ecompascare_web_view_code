@@ -31,7 +31,6 @@ class SplashController extends GetxController {
   void onReady() {
     splashTimer();
     playSound();
-
     super.onReady();
   }
 }

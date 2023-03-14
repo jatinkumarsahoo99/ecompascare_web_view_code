@@ -1,12 +1,11 @@
 name: ecompasscare
-version: 1.0.0+19
+version: 1.0.0+20
 publish_to: none
 description: A new Flutter project.
 environment:
   sdk: ">=2.18.2 <3.0.0"
 
 dependencies:
-  # cupertino_icons: ^1.0.2
   get: 4.6.5
   flutter:
     sdk: flutter
@@ -16,7 +15,7 @@ dependencies:
   #   path: packages/graphics
 
   #other
-  webview_flutter: ^3.0.4
+  webview_flutter: ^4.0.6
   geolocator: ^9.0.2
   lottie: ^2.2.0
   just_audio: ^0.9.31

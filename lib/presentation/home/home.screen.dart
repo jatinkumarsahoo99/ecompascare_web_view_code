@@ -8,6 +8,7 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    // controller.onListCookies(context);
     Future<bool> onWillPop() async {
       return (await showDialog(
             context: context,
@@ -40,23 +41,11 @@ class HomeScreen extends GetView<HomeController> {
           bottom: false,
           child: Column(
             children: [
+              // Obx(() => Text('Cookies== ${controller.testCookies.value}')),
               Obx(() {
                 return Expanded(
-                  child: Opacity(
-                    opacity: controller.isInitialLoaded.value ? 1 : 0.5,
-                    child: WebView(
-                      gestureNavigationEnabled: true,
-                      initialUrl:
-                          'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?is_app=true',
-                      javascriptMode: JavascriptMode.unrestricted,
-                      zoomEnabled: false,
-                      onPageFinished: (String url) {
-                        if (!controller.isInitialLoaded.value) {
-                          controller.isInitialLoaded.value = true;
-                        }
-                      },
-                    ),
-                  ),
+                  child:
+                      WebViewWidget(controller: controller.webViewController),
                 );
               }),
             ],
