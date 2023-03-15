@@ -36,6 +36,11 @@
 	<string>This app needs access to camera to upload profile pic.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app needs access to photo library to upload profile pic.</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>sms</string>
+	<string>tel</string>
+	</array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

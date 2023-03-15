@@ -2,6 +2,7 @@ import 'package:ecompasscare/dal/core/network_state/network_state_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
@@ -54,6 +55,13 @@ class HomeController extends GetxController with NetworkStateMixin1 {
             );
           },
           onNavigationRequest: (NavigationRequest request) {
+            if (request.url.contains("mailto:")) {
+              launchUrl(Uri.parse(request.url));
+              return NavigationDecision.prevent;
+            } else if (request.url.contains("tel:")) {
+              launchUrl(Uri.parse(request.url));
+              return NavigationDecision.prevent;
+            }
             debugPrint('allowing navigation to ${request.url}');
             return NavigationDecision.navigate;
           },
