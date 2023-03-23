@@ -9,17 +9,37 @@ class SplashScreen extends GetView<SplashController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: Stack(
         children: [
-          Expanded(
-            child: Lottie.asset(
-              AssetConsts.lottieSplash,
-              fit: BoxFit.fill,
-              repeat: controller.repeat,
-              alignment: Alignment.center,
-            ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: Lottie.asset(
+                  AssetConsts.lottieSplash,
+                  fit: BoxFit.fill,
+                  repeat: controller.repeat,
+                  alignment: Alignment.center,
+                ),
+              ),
+            ],
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                width: Get.width,
+                color: const Color(0xff6C3F94).withOpacity(0.3),
+                child: Center(
+                  child: Obx(() => Text(
+                        'Version: ${controller.packageInfo.value.version}(${controller.packageInfo.value.buildNumber})',
+                      )),
+                ),
+              ),
+              const SizedBox(height: 30),
+            ],
           ),
         ],
       ),

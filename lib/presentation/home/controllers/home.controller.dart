@@ -55,11 +55,15 @@ class HomeController extends GetxController with NetworkStateMixin1 {
             );
           },
           onNavigationRequest: (NavigationRequest request) {
-            if (request.url.contains("mailto:")) {
-              launchUrl(Uri.parse(request.url));
-              return NavigationDecision.prevent;
-            } else if (request.url.contains("tel:")) {
-              launchUrl(Uri.parse(request.url));
+            if (request.url.contains("mailto:") ||
+                request.url.contains("tel:") ||
+                request.url.contains("whatsapp:") ||
+                request.url.contains("facebook") ||
+                request.url.contains("maps")) {
+              launchUrl(
+                Uri.parse(request.url),
+                mode: LaunchMode.externalApplication,
+              );
               return NavigationDecision.prevent;
             }
             debugPrint('allowing navigation to ${request.url}');
@@ -83,16 +87,19 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   }
 
   getLocation() async {
-    try {
-      permission = await Geolocator.requestPermission();
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-    if (permission == LocationPermission.always ||
-        permission == LocationPermission.whileInUse) {
-      Position loc;
-      loc = await Geolocator.getCurrentPosition();
-      debugPrint(loc.toString());
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      try {
+        permission = await Geolocator.requestPermission();
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+      if (permission == LocationPermission.always ||
+          permission == LocationPermission.whileInUse) {
+        Position loc;
+        loc = await Geolocator.getCurrentPosition();
+        debugPrint(loc.toString());
+      }
     }
   }
 
@@ -140,6 +147,11 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   void onReady() async {
     testCookies.value = await webViewController
         .runJavaScriptReturningResult('document.cookie') as String;
+
+    // final status = await OneSignal.shared.getDeviceState();
+    // final String? osUserID = status?.userId;
+    // debugPrint('------------------- $osUserID');
+
     await initWebview();
     super.onReady();
   }

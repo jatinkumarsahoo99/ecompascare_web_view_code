@@ -1,5 +1,5 @@
 name: ecompasscare
-version: 1.0.0+22
+version: 1.0.0+23
 publish_to: none
 description: A new Flutter project.
 environment:
@@ -20,6 +20,8 @@ dependencies:
   lottie: ^2.2.0
   just_audio: ^0.9.31
   url_launcher: ^6.1.10
+  onesignal_flutter: ^3.5.1
+  package_info_plus: ^3.0.3
 
 dev_dependencies:
   flutter_lints: ^2.0.0

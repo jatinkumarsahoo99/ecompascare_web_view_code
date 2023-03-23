@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "237487246699",
+    "project_id": "ecompass-care",
+    "storage_bucket": "ecompass-care.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237487246699:android:ab1ee0f9e74401885ad02e",
+        "android_client_info": {
+          "package_name": "com.skillmine.ecompass"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "237487246699-l3082n2drupasi5bjsgp9go2e13u6qp0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCld2fr6wFLDg66e7PczTK-1sSrUJSUiL8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "237487246699-l3082n2drupasi5bjsgp9go2e13u6qp0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
