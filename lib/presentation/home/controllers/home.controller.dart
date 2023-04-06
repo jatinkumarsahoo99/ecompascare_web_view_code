@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'package:ecompasscare/dal/core/network_state/network_state_mixin.dart';
+import 'package:ecompasscare/dal/services/remote_db.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
@@ -11,7 +14,11 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   late final PlatformWebViewControllerCreationParams params;
   late final WebViewController webViewController;
   late final WebViewCookieManager cookieManager = WebViewCookieManager();
-  final RxString testCookies = ''.obs;
+  static const String oneSignalAppId = '80786b47-31d8-4018-b284-5b5845b4bbb5';
+  Timer? timer;
+  late OSDeviceState? deviceState;
+  bool stopTag = false;
+  String accessToken = '';
 
   initParams() async {
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
@@ -28,7 +35,8 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       const WebViewCookie(
         name: 'is_mobile_app',
         value: 'true',
-        domain: 'craftercms-delivery-dev.skill-mine.com',
+        // domain: 'craftercms-delivery-dev.skill-mine.com',
+        domain: 'sterling-accuris.skill-mine.com',
       ),
     );
   }
@@ -81,8 +89,8 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       // )
       ..loadRequest(
         Uri.parse(
-          'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?is_app=true',
-        ),
+            // 'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?is_app=true',
+            'https://sterling-accuris.skill-mine.com/mobile-homepage?is_app=true'),
       );
   }
 
@@ -103,37 +111,42 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     }
   }
 
-  Future<void> onListCookies(BuildContext context) async {
-    final String cookies = await webViewController
-        .runJavaScriptReturningResult('document.cookie') as String;
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const Text('Cookies:'),
-              _getCookieList(cookies),
-            ],
-          ),
-        ),
-      );
+  void cookieTimer() {
+    timer = Timer.periodic(
+        const Duration(seconds: 5), (Timer t) => onListCookies());
+  }
+
+  Future<void> onListCookies() async {
+    try {
+      accessToken = await webViewController.runJavaScriptReturningResult(
+          "localStorage.getItem('access_token')") as String;
+    } catch (e) {
+      debugPrint('Cookies Not Found!');
+    }
+    debugPrint(
+        '--------------------------\n Cookies Found: $accessToken\n--------------------------');
+    if (accessToken == '' || accessToken == 'null' || accessToken == null) {
+      //
+    } else {
+      initNotification();
     }
   }
 
-  Widget _getCookieList(String cookies) {
-    if (cookies == null || cookies == '""') {
-      return Container();
+  Future<void> initNotification() async {
+    debugPrint('calling init noti');
+    OneSignal.shared.setAppId(oneSignalAppId);
+    OneSignal.shared
+        .promptUserForPushNotificationPermission()
+        .then((accepted) {});
+    deviceState = await OneSignal.shared.getDeviceState();
+    if (stopTag == false && deviceState != null) {
+      String resp = await playerIDMap(accessToken, deviceState?.userId ?? '');
+      debugPrint('API Response: $resp');
+      stopTag = true;
+      if (resp == 200) {
+        stopTag = true;
+      }
     }
-    final List<String> cookieList = cookies.split(';');
-    final Iterable<Text> cookieWidgets =
-        cookieList.map((String cookie) => Text(cookie));
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: cookieWidgets.toList(),
-    );
   }
 
   @override
@@ -145,8 +158,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
 
   @override
   void onReady() async {
-    testCookies.value = await webViewController
-        .runJavaScriptReturningResult('document.cookie') as String;
+    // cookieTimer();
 
     // final status = await OneSignal.shared.getDeviceState();
     // final String? osUserID = status?.userId;
@@ -154,5 +166,11 @@ class HomeController extends GetxController with NetworkStateMixin1 {
 
     await initWebview();
     super.onReady();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 }

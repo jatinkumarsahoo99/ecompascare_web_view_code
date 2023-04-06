@@ -8,7 +8,6 @@ class HomeScreen extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    // controller.onListCookies(context);
     Future<bool> onWillPop() async {
       if (await controller.webViewController.canGoBack()) {
         controller.webViewController.goBack();

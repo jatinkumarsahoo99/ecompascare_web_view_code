@@ -42,20 +42,9 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-  ///Notification
-  Future<void> initPlatformState() async {
-    OneSignal.shared.setAppId(Main.oneSignalAppId);
-    OneSignal.shared
-        .promptUserForPushNotificationPermission()
-        .then((accepted) {});
-  }
-
   @override
   void initState() {
     super.initState();
-
-    ///TODO: Notification
-    // initPlatformState();
   }
 
   @override
