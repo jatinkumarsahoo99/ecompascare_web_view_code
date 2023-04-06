@@ -1,5 +1,5 @@
 name: ecompasscare
-version: 1.0.0+30
+version: 2.0.2+30
 publish_to: none
 description: A new Flutter project.
 environment:
@@ -34,7 +34,7 @@ dev_dependencies:
   shared_preferences: ^2.0.15
   #for network calls
   connectivity_plus: ^3.0.2
-  dio: ^4.0.6
+  dio: ^5.1.1
   #For local db/storage/cache management
   # objectbox: ^1.6.2
   # objectbox_flutter_libs: any
