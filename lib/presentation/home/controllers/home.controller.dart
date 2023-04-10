@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:ecompasscare/dal/core/network_state/network_state_mixin.dart';
 import 'package:ecompasscare/dal/services/remote_db.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 class HomeController extends GetxController with NetworkStateMixin1 {
   late LocationPermission permission;
@@ -19,6 +22,9 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   late OSDeviceState? deviceState;
   bool stopTag = false;
   String accessToken = '';
+  FilePickerResult? result;
+  File? file;
+  RxBool firstLoad = false.obs;
 
   initParams() async {
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
@@ -30,6 +36,32 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       params = const PlatformWebViewControllerCreationParams();
     }
     webViewController = WebViewController.fromPlatformCreationParams(params);
+
+    if (webViewController.platform is AndroidWebViewController) {
+      AndroidWebViewController.enableDebugging(true);
+
+      (webViewController.platform as AndroidWebViewController)
+          .setMediaPlaybackRequiresUserGesture(false);
+
+      (webViewController.platform as AndroidWebViewController)
+          .setOnShowFileSelector(
+        (params) async {
+          debugPrint(
+              '\n--------------------\nstatement\n--------------------\n');
+
+          ///TODO: Permission handler
+          ///TODO: Drop down and image picker
+          FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+          if (result != null) {
+            file = File(result.files.single.path ?? '');
+          } else {
+            return [];
+          }
+          return [(file?.uri).toString()];
+        },
+      );
+    }
 
     await cookieManager.setCookie(
       const WebViewCookie(
@@ -55,6 +87,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
             debugPrint('Page started loading: $url');
           },
           onPageFinished: (String url) {
+            firstLoad.value = true;
             debugPrint('Page finished loading: $url');
           },
           onWebResourceError: (WebResourceError error) {
@@ -135,17 +168,17 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   Future<void> initNotification() async {
     debugPrint('calling init noti');
     OneSignal.shared.setAppId(oneSignalAppId);
-    OneSignal.shared
-        .promptUserForPushNotificationPermission()
-        .then((accepted) {});
+    OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+      //
+    });
     deviceState = await OneSignal.shared.getDeviceState();
     if (stopTag == false && deviceState != null) {
       String resp = await playerIDMap(accessToken, deviceState?.userId ?? '');
       debugPrint('API Response: $resp');
       stopTag = true;
-      if (resp == 200) {
-        stopTag = true;
-      }
+      // if (resp == 200) {
+      //   stopTag = true;
+      // }
     }
   }
 
@@ -153,12 +186,14 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   void onInit() async {
     await initParams();
     getLocation();
+    Timer.periodic(
+        const Duration(seconds: 5), (Timer t) => firstLoad.value = true);
     super.onInit();
   }
 
   @override
   void onReady() async {
-    // cookieTimer();
+    cookieTimer();
 
     // final status = await OneSignal.shared.getDeviceState();
     // final String? osUserID = status?.userId;
