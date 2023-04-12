@@ -2,11 +2,14 @@ import 'dart:async';
 import 'dart:io';
 import 'package:ecompasscare/dal/core/network_state/network_state_mixin.dart';
 import 'package:ecompasscare/dal/services/remote_db.dart';
+import 'package:ecompasscare/infrastructure/navigation/routes.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
@@ -20,13 +23,20 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   static const String oneSignalAppId = '80786b47-31d8-4018-b284-5b5845b4bbb5';
   Timer? timer;
   late OSDeviceState? deviceState;
-  bool stopTag = false;
   String accessToken = '';
   FilePickerResult? result;
   File? file;
   RxBool firstLoad = false.obs;
+  late final SharedPreferences prefs;
+  final Completer<PDFViewController> _controller =
+      Completer<PDFViewController>();
 
   initParams() async {
+    prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool('stopTag') == null) {
+      await prefs.setBool('stopTag', false);
+    }
+
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
       params = WebKitWebViewControllerCreationParams(
         allowsInlineMediaPlayback: true,
@@ -51,6 +61,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
 
           ///TODO: Permission handler
           ///TODO: Drop down and image picker
+          ///TODO: store api call variable in local :DONE
           FilePickerResult? result = await FilePicker.platform.pickFiles();
 
           if (result != null) {
@@ -100,7 +111,8 @@ class HomeController extends GetxController with NetworkStateMixin1 {
                 request.url.contains("tel:") ||
                 request.url.contains("whatsapp:") ||
                 request.url.contains("facebook") ||
-                request.url.contains("maps")) {
+                request.url.contains("maps") ||
+                request.url.contains('v1/document')) {
               launchUrl(
                 Uri.parse(request.url),
                 mode: LaunchMode.externalApplication,
@@ -122,8 +134,9 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       // )
       ..loadRequest(
         Uri.parse(
-            // 'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?is_app=true',
-            'https://sterling-accuris.skill-mine.com/mobile-homepage?is_app=true'),
+          // 'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?is_app=true',
+          'https://sterling-accuris.skill-mine.com/mobile-homepage?is_app=true',
+        ),
       );
   }
 
@@ -153,6 +166,9 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     try {
       accessToken = await webViewController.runJavaScriptReturningResult(
           "localStorage.getItem('access_token')") as String;
+      // if (accessToken != null || accessToken != 'null') {
+      //   await prefs.setString('loginToken', accessToken);
+      // }
     } catch (e) {
       debugPrint('Cookies Not Found!');
     }
@@ -166,19 +182,22 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   }
 
   Future<void> initNotification() async {
-    debugPrint('calling init noti');
-    OneSignal.shared.setAppId(oneSignalAppId);
-    OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
-      //
-    });
-    deviceState = await OneSignal.shared.getDeviceState();
-    if (stopTag == false && deviceState != null) {
-      String resp = await playerIDMap(accessToken, deviceState?.userId ?? '');
-      debugPrint('API Response: $resp');
-      stopTag = true;
-      // if (resp == 200) {
-      //   stopTag = true;
-      // }
+    if (prefs.getBool('stopTag') == false) {
+      debugPrint('calling init noti');
+      OneSignal.shared.setAppId(oneSignalAppId);
+      OneSignal.shared
+          .promptUserForPushNotificationPermission()
+          .then((accepted) {
+        //
+      });
+      deviceState = await OneSignal.shared.getDeviceState();
+      if (deviceState != null) {
+        String resp = await playerIDMap(accessToken, deviceState?.userId ?? '');
+        debugPrint('API Response: $resp');
+        if (resp == '200') {
+          await prefs.setBool('stopTag', true);
+        }
+      }
     }
   }
 

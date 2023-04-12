@@ -24,6 +24,8 @@ dependencies:
   package_info_plus: ^3.0.3
   http: ^0.13.5
   file_picker: ^5.2.7
+  flutter_pdfview: ^1.3.0
+  shared_preferences: ^2.1.0
   # flutter_launcher_icons: ^0.12.0
 
 dev_dependencies:
@@ -32,7 +34,6 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^2.0.0
   objectbox_generator: any
-  shared_preferences: ^2.0.15
   #for network calls
   connectivity_plus: ^3.0.2
   dio: ^5.1.1

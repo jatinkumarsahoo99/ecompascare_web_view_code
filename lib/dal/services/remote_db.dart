@@ -16,5 +16,5 @@ Future<String> playerIDMap(String token, String playerID) async {
     },
     body: jsonEncode(<String, dynamic>{"player_id": playerID}),
   );
-  return response.body;
+  return response.statusCode.toString();
 }

@@ -13,6 +13,7 @@ class HomeScreen extends GetView<HomeController> {
         controller.webViewController.goBack();
         return Future.value(false);
       } else {
+        // ignore: use_build_context_synchronously
         return (await showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -37,26 +38,38 @@ class HomeScreen extends GetView<HomeController> {
       onWillPop: onWillPop,
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Obx(() {
-          return controller.firstLoad.value == false
-              ? const Center(child: CircularProgressIndicator())
-              : SafeArea(
-                  top: true,
-                  left: false,
-                  right: false,
-                  bottom: false,
-                  child: Column(
-                    children: [
-                      // Obx(() => Text('Cookies== ${controller.testCookies.value}')),
-                      Expanded(
-                        child: WebViewWidget(
-                            controller: controller.webViewController),
-                      ),
-                    ],
-                  ),
-                );
-        }),
+        body: Obx(
+          () {
+            return controller.firstLoad.value == false
+                ? const Center(child: CircularProgressIndicator())
+                : SafeArea(
+                    top: true,
+                    left: false,
+                    right: false,
+                    bottom: false,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: WebViewWidget(
+                            controller: controller.webViewController,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+          },
+        ),
       ),
     );
   }
 }
+
+// class DialogExample extends StatelessWidget {
+//   const DialogExample({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return 
+//     Get.dialog(Text('data'));
+//   }
+// }
