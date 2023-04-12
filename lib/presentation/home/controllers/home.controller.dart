@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:ecompasscare/dal/core/network_state/network_state_mixin.dart';
 import 'package:ecompasscare/dal/services/remote_db.dart';
-import 'package:ecompasscare/infrastructure/navigation/routes.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -24,12 +22,9 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   Timer? timer;
   late OSDeviceState? deviceState;
   String accessToken = '';
-  FilePickerResult? result;
   File? file;
   RxBool firstLoad = false.obs;
   late final SharedPreferences prefs;
-  final Completer<PDFViewController> _controller =
-      Completer<PDFViewController>();
 
   initParams() async {
     prefs = await SharedPreferences.getInstance();
@@ -166,14 +161,22 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     try {
       accessToken = await webViewController.runJavaScriptReturningResult(
           "localStorage.getItem('access_token')") as String;
-      // if (accessToken != null || accessToken != 'null') {
-      //   await prefs.setString('loginToken', accessToken);
-      // }
+      if (accessToken != null || accessToken != 'null' || accessToken != '') {
+        await prefs.setString('loginToken', accessToken);
+      }
     } catch (e) {
       debugPrint('Cookies Not Found!');
+      accessToken = '';
+      if (prefs.get('loginToken') != null) {
+        //TODO: Call remove API
+        prefs.remove('loginToken');
+        prefs.setBool('stopTag', false);
+      }
     }
     debugPrint(
         '--------------------------\n Cookies Found: $accessToken\n--------------------------');
+
+    ///TODO: not working
     if (accessToken == '' || accessToken == 'null' || accessToken == null) {
       //
     } else {

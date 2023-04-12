@@ -1,8 +1,6 @@
-import 'package:ecompasscare/infrastructure/consts/asset_consts.dart';
 import 'package:ecompasscare/infrastructure/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:just_audio/just_audio.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SplashController extends GetxController {
