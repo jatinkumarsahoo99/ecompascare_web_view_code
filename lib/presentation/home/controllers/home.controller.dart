@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:ecompasscare/dal/core/network_state/network_state_mixin.dart';
 import 'package:ecompasscare/dal/services/remote_db.dart';
+import 'package:ecompasscare/infrastructure/navigation/routes.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -103,15 +104,30 @@ class HomeController extends GetxController with NetworkStateMixin1 {
           },
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.contains("mailto:") ||
-                request.url.contains("tel:") ||
-                request.url.contains("whatsapp:") ||
-                request.url.contains("facebook") ||
-                request.url.contains("maps") ||
-                request.url.contains('v1/document')) {
+                    request.url.contains("tel:") ||
+                    request.url.contains("whatsapp:") ||
+                    request.url.contains("facebook") ||
+                    request.url.contains("maps")
+                // ||
+                // request.url.contains('v1/document')
+                ) {
               launchUrl(
                 Uri.parse(request.url),
                 mode: LaunchMode.externalApplication,
               );
+              return NavigationDecision.prevent;
+            } else if (request.url.contains('v1/document')) {
+              Get.toNamed(Routes.PDFVIEWPAGE, arguments: request.url);
+              // launchUrl(
+              //   Uri.parse(request.url),
+              //   mode: LaunchMode.externalApplication,
+              //   webViewConfiguration: const WebViewConfiguration(
+              //     enableDomStorage: true,
+              //     enableJavaScript: true,
+              //     headers: {'test': 'test'},
+              //   ),
+              //   webOnlyWindowName: '_blank',
+              // );
               return NavigationDecision.prevent;
             }
             debugPrint('allowing navigation to ${request.url}');
@@ -194,13 +210,15 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         //
       });
       deviceState = await OneSignal.shared.getDeviceState();
-      if (deviceState != null) {
-        String resp = await playerIDMap(accessToken, deviceState?.userId ?? '');
-        debugPrint('API Response: $resp');
-        if (resp == '200') {
-          await prefs.setBool('stopTag', true);
-        }
-      }
+
+      ///TODO: remove comment
+      // if (deviceState != null) {
+      //   String resp = await playerIDMap(accessToken, deviceState?.userId ?? '');
+      //   debugPrint('API Response: $resp');
+      //   if (resp == '200') {
+      //     await prefs.setBool('stopTag', true);
+      //   }
+      // }
     }
   }
 
