@@ -19,7 +19,8 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   late final PlatformWebViewControllerCreationParams params;
   late final WebViewController webViewController;
   late final WebViewCookieManager cookieManager = WebViewCookieManager();
-  static const String oneSignalAppId = '80786b47-31d8-4018-b284-5b5845b4bbb5';
+  // static const String oneSignalAppId = '80786b47-31d8-4018-b284-5b5845b4bbb5';
+  static const String oneSignalAppId = 'ee1713d2-e9c2-4bf2-9613-7456d1dad45e';
   Timer? timer;
   late OSDeviceState? deviceState;
   String accessToken = '';
@@ -75,7 +76,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         name: 'is_mobile_app',
         value: 'true',
         // domain: 'craftercms-delivery-dev.skill-mine.com',
-        domain: 'sterling-accuris.skill-mine.com',
+        domain: 'sterlingaccuris.in',
       ),
     );
   }
@@ -118,16 +119,6 @@ class HomeController extends GetxController with NetworkStateMixin1 {
               return NavigationDecision.prevent;
             } else if (request.url.contains('v1/document')) {
               Get.toNamed(Routes.PDFVIEWPAGE, arguments: request.url);
-              // launchUrl(
-              //   Uri.parse(request.url),
-              //   mode: LaunchMode.externalApplication,
-              //   webViewConfiguration: const WebViewConfiguration(
-              //     enableDomStorage: true,
-              //     enableJavaScript: true,
-              //     headers: {'test': 'test'},
-              //   ),
-              //   webOnlyWindowName: '_blank',
-              // );
               return NavigationDecision.prevent;
             }
             debugPrint('allowing navigation to ${request.url}');
@@ -146,7 +137,8 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       ..loadRequest(
         Uri.parse(
           // 'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?is_app=true',
-          'https://sterling-accuris.skill-mine.com/mobile-homepage?is_app=true',
+          // 'https://sterling-accuris.skill-mine.com/mobile-homepage?is_app=true',
+          'https://sterlingaccuris.in?is_app=true',
         ),
       );
   }
@@ -210,15 +202,15 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         //
       });
       deviceState = await OneSignal.shared.getDeviceState();
+      if (deviceState != null) {
+        String resp = await playerIDMap(accessToken, deviceState?.userId ?? '');
 
-      ///TODO: remove comment
-      // if (deviceState != null) {
-      //   String resp = await playerIDMap(accessToken, deviceState?.userId ?? '');
-      //   debugPrint('API Response: $resp');
-      //   if (resp == '200') {
-      //     await prefs.setBool('stopTag', true);
-      //   }
-      // }
+        debugPrint('Device ID: ${deviceState?.userId}');
+        debugPrint('API Response: $resp');
+        if (resp == '200') {
+          await prefs.setBool('stopTag', true);
+        }
+      }
     }
   }
 
