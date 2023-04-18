@@ -14,12 +14,17 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
+///TODO: ios notification setup
+///TODO: setup config file
+
 class HomeController extends GetxController with NetworkStateMixin1 {
   late LocationPermission permission;
   late final PlatformWebViewControllerCreationParams params;
   late final WebViewController webViewController;
   late final WebViewCookieManager cookieManager = WebViewCookieManager();
+  //Dev
   // static const String oneSignalAppId = '80786b47-31d8-4018-b284-5b5845b4bbb5';
+  //Live
   static const String oneSignalAppId = 'ee1713d2-e9c2-4bf2-9613-7456d1dad45e';
   Timer? timer;
   late OSDeviceState? deviceState;
@@ -105,19 +110,17 @@ class HomeController extends GetxController with NetworkStateMixin1 {
           },
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.contains("mailto:") ||
-                    request.url.contains("tel:") ||
-                    request.url.contains("whatsapp:") ||
-                    request.url.contains("facebook") ||
-                    request.url.contains("maps")
-                // ||
-                // request.url.contains('v1/document')
-                ) {
+                request.url.contains("tel:") ||
+                request.url.contains("whatsapp:") ||
+                request.url.contains("facebook") ||
+                request.url.contains("maps")) {
               launchUrl(
                 Uri.parse(request.url),
                 mode: LaunchMode.externalApplication,
               );
               return NavigationDecision.prevent;
             } else if (request.url.contains('v1/document')) {
+              ///TODO: call server and get file details, based on mine type load
               Get.toNamed(Routes.PDFVIEWPAGE, arguments: request.url);
               return NavigationDecision.prevent;
             }
@@ -136,9 +139,8 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       // )
       ..loadRequest(
         Uri.parse(
-          // 'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?is_app=true',
-          // 'https://sterling-accuris.skill-mine.com/mobile-homepage?is_app=true',
-          'https://sterlingaccuris.in?is_app=true',
+          'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?is_app=true',
+          // 'https://sterlingaccuris.in?is_app=true',
         ),
       );
   }
@@ -201,6 +203,22 @@ class HomeController extends GetxController with NetworkStateMixin1 {
           .then((accepted) {
         //
       });
+      OneSignal.shared
+          .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+        debugPrint('NOTIFICATION OPENED HANDLER CALLED WITH: $result');
+        webViewController.loadRequest(
+          Uri.parse(
+            'https://sterlingaccuris.in/patient-portal/notifications?is_app=true',
+          ),
+        );
+      });
+      // OneSignal.shared.setNotificationWillShowInForegroundHandler(
+      //     (OSNotificationReceivedEvent event) {
+      //   debugPrint('FOREGROUND HANDLER CALLED WITH: $event');
+
+      //   /// Display Notification, send null to not display
+      //   event.complete(null);
+      // });
       deviceState = await OneSignal.shared.getDeviceState();
       if (deviceState != null) {
         String resp = await playerIDMap(accessToken, deviceState?.userId ?? '');

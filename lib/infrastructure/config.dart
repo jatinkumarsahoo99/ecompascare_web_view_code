@@ -17,7 +17,8 @@ class ConfigEnvironments {
     },
     {
       'env': Environments.DEV,
-      'url': '',
+      'url':
+          'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?is_app=true',
     },
     {
       'env': Environments.QAS,

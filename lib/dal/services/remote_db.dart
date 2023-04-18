@@ -1,5 +1,4 @@
 import 'dart:convert';
-// import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 Future<String> playerIDMap(String token, String playerID) async {
@@ -7,6 +6,7 @@ Future<String> playerIDMap(String token, String playerID) async {
   final response = await http.post(
     Uri.parse(
       'https://ecompaascare-srv-dev.skill-mine.com/api/v1/user/player/map',
+      // 'https://api.sterlingaccuris.in/api/v1/user/player/map',
     ),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
