@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>237487246699-lftd2cd60nr7pm3rda8nfquvnq1s69ig.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.237487246699-lftd2cd60nr7pm3rda8nfquvnq1s69ig</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCqn8-pQ6FeZUG4pjtUpUiIDqMm3mhJH0I</string>
+	<key>GCM_SENDER_ID</key>
+	<string>237487246699</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.sterlingAccuris.ios</string>
+	<key>PROJECT_ID</key>
+	<string>ecompass-care</string>
+	<key>STORAGE_BUCKET</key>
+	<string>ecompass-care.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:237487246699:ios:8ef6e2c7ae83c4455ad02e</string>
+	<key>DATABASE_URL</key>
+	<string>https://ecompass-care-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+</dict>
+</plist>

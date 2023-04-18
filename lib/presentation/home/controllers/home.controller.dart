@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:ecompasscare/dal/core/network_state/network_state_mixin.dart';
 import 'package:ecompasscare/dal/services/remote_db.dart';
+import 'package:ecompasscare/infrastructure/config.dart';
 import 'package:ecompasscare/infrastructure/navigation/routes.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -15,17 +16,13 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
 ///TODO: ios notification setup
-///TODO: setup config file
 
 class HomeController extends GetxController with NetworkStateMixin1 {
   late LocationPermission permission;
   late final PlatformWebViewControllerCreationParams params;
   late final WebViewController webViewController;
   late final WebViewCookieManager cookieManager = WebViewCookieManager();
-  //Dev
-  // static const String oneSignalAppId = '80786b47-31d8-4018-b284-5b5845b4bbb5';
-  //Live
-  static const String oneSignalAppId = 'ee1713d2-e9c2-4bf2-9613-7456d1dad45e';
+  String oneSignalAppId = ConfigEnvironments.env['OSAppId'];
   Timer? timer;
   late OSDeviceState? deviceState;
   String accessToken = '';
@@ -34,6 +31,12 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   late final SharedPreferences prefs;
 
   initParams() async {
+    var env = ConfigEnvironments.env['url'];
+    debugPrint('\n-----------------------\n$env\n-----------------------\n');
+    debugPrint(
+      'https://${ConfigEnvironments.env['domain']}/patient-portal/notifications?is_app=true',
+    );
+
     prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('stopTag') == null) {
       await prefs.setBool('stopTag', false);
@@ -58,9 +61,6 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       (webViewController.platform as AndroidWebViewController)
           .setOnShowFileSelector(
         (params) async {
-          debugPrint(
-              '\n--------------------\nstatement\n--------------------\n');
-
           ///TODO: Permission handler
           ///TODO: Drop down and image picker
           ///TODO: store api call variable in local :DONE
@@ -77,11 +77,10 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     }
 
     await cookieManager.setCookie(
-      const WebViewCookie(
+      WebViewCookie(
         name: 'is_mobile_app',
         value: 'true',
-        // domain: 'craftercms-delivery-dev.skill-mine.com',
-        domain: 'sterlingaccuris.in',
+        domain: ConfigEnvironments.env['domain'],
       ),
     );
   }
@@ -138,10 +137,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       //   },
       // )
       ..loadRequest(
-        Uri.parse(
-          'https://craftercms-delivery-dev.skill-mine.com/mobile-homepage?is_app=true',
-          // 'https://sterlingaccuris.in?is_app=true',
-        ),
+        Uri.parse(ConfigEnvironments.env['url']),
       );
   }
 
@@ -208,7 +204,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         debugPrint('NOTIFICATION OPENED HANDLER CALLED WITH: $result');
         webViewController.loadRequest(
           Uri.parse(
-            'https://sterlingaccuris.in/patient-portal/notifications?is_app=true',
+            'https://${ConfigEnvironments.env['domain']}/patient-portal/notifications?is_app=true',
           ),
         );
       });

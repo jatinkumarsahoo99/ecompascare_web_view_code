@@ -1,23 +1,34 @@
+import 'package:ecompasscare/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'infrastructure/config.dart';
 import 'infrastructure/navigation/navigation.dart';
 import 'infrastructure/navigation/routes.dart';
 
 void main() async {
   var initialRoute = await Routes.initialRoute;
-  // WidgetsFlutterBinding.ensureInitialized();
-  // ConfigEnvironments.currentEnvironments = Environments.LOCAL;
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  var prodInfo = await firebaseGet();
+  debugPrint('------------$prodInfo----------');
+  ConfigEnvironments.currentEnvironments =
+      prodInfo == 'true' ? Environments.PRODUCTION : Environments.DEV;
   runApp(Main(initialRoute));
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
   );
 }
 
-class Main extends StatefulWidget {
-  static const String oneSignalAppId = '80786b47-31d8-4018-b284-5b5845b4bbb5';
-  // static const String oneSignalAppId = '2eff7b0b-35e6-49e2-b44b-b163750c32a2';
+firebaseGet() async {
+  DatabaseReference ref = FirebaseDatabase.instance.ref("prod");
+  DatabaseEvent event = await ref.once();
+  return event.snapshot.value.toString();
+}
 
+class Main extends StatefulWidget {
   final String initialRoute;
   const Main(this.initialRoute, {super.key});
 
