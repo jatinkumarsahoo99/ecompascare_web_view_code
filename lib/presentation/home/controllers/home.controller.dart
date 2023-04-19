@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:ecompasscare/dal/core/network_state/network_state_mixin.dart';
 import 'package:ecompasscare/dal/services/remote_db.dart';
+import 'package:ecompasscare/domain/entity/file_details.dart';
 import 'package:ecompasscare/infrastructure/config.dart';
 import 'package:ecompasscare/infrastructure/navigation/routes.dart';
 import 'package:file_picker/file_picker.dart';
@@ -29,6 +30,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   File? file;
   RxBool firstLoad = false.obs;
   late final SharedPreferences prefs;
+  FileDetails fileDetails = FileDetails();
 
   initParams() async {
     var env = ConfigEnvironments.env['url'];
@@ -53,6 +55,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     webViewController = WebViewController.fromPlatformCreationParams(params);
 
     if (webViewController.platform is AndroidWebViewController) {
+      webViewController.enableZoom(false);
       AndroidWebViewController.enableDebugging(true);
 
       (webViewController.platform as AndroidWebViewController)
@@ -61,9 +64,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       (webViewController.platform as AndroidWebViewController)
           .setOnShowFileSelector(
         (params) async {
-          ///TODO: Permission handler
           ///TODO: Drop down and image picker
-          ///TODO: store api call variable in local :DONE
           FilePickerResult? result = await FilePicker.platform.pickFiles();
 
           if (result != null) {
@@ -107,7 +108,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
               '''Page resource error:\n code: ${error.errorCode}\n description: ${error.description}\n errorType: ${error.errorType}\n isForMainFrame: ${error.isForMainFrame}''',
             );
           },
-          onNavigationRequest: (NavigationRequest request) {
+          onNavigationRequest: (NavigationRequest request) async {
             if (request.url.contains("mailto:") ||
                 request.url.contains("tel:") ||
                 request.url.contains("whatsapp:") ||
@@ -119,8 +120,19 @@ class HomeController extends GetxController with NetworkStateMixin1 {
               );
               return NavigationDecision.prevent;
             } else if (request.url.contains('v1/document')) {
-              ///TODO: call server and get file details, based on mine type load
-              Get.toNamed(Routes.PDFVIEWPAGE, arguments: request.url);
+              fileDetails = await fileDetailsAPI(
+                  prefs.getString('loginToken') ?? '',
+                  request.url.split('document/')[1]);
+              Get.toNamed(
+                Routes.PDFVIEWPAGE,
+                arguments: {
+                  'url': request.url,
+                  'fileType':
+                      (fileDetails.data?.docType ?? '').contains('image')
+                          ? 'image'
+                          : 'pdf',
+                },
+              );
               return NavigationDecision.prevent;
             }
             debugPrint('allowing navigation to ${request.url}');
@@ -136,9 +148,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       //     );
       //   },
       // )
-      ..loadRequest(
-        Uri.parse(ConfigEnvironments.env['url']),
-      );
+      ..loadRequest(Uri.parse(ConfigEnvironments.env['url']));
   }
 
   getLocation() async {
@@ -167,6 +177,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     try {
       accessToken = await webViewController.runJavaScriptReturningResult(
           "localStorage.getItem('access_token')") as String;
+      accessToken = accessToken.substring(1, accessToken.length - 1);
       if (accessToken != null || accessToken != 'null' || accessToken != '') {
         await prefs.setString('loginToken', accessToken);
       }

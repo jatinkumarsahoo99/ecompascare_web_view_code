@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'controllers/pdfviewpage.controller.dart';
@@ -29,9 +30,17 @@ class PdfviewpageScreen extends GetView<PdfviewpageController> {
         ),
         body: Stack(
           children: [
-            SfPdfViewer.network(
-              controller.link.value,
-            ),
+            controller.fileType.value == 'image'
+                ? PhotoView(
+                    backgroundDecoration:
+                        const BoxDecoration(color: Colors.black12),
+                    imageProvider: NetworkImage(
+                      controller.link.value,
+                    ),
+                  )
+                : SfPdfViewer.network(
+                    controller.link.value,
+                  ),
             Positioned(
               top: 40,
               right: 20,
