@@ -1,4 +1,4 @@
-package com.skillmine.ecompass
+package com.sterlingaccuris.android
 
 import io.flutter.embedding.android.FlutterActivity
 

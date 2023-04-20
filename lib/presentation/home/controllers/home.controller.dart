@@ -177,25 +177,34 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     try {
       accessToken = await webViewController.runJavaScriptReturningResult(
           "localStorage.getItem('access_token')") as String;
+      debugPrint('$accessToken------------------');
       accessToken = accessToken.substring(1, accessToken.length - 1);
-      if (accessToken != null || accessToken != 'null' || accessToken != '') {
+      if (accessToken == 'ul') {
+        debugPrint('Null');
+        accessToken = '';
+      } else {
+        debugPrint('Not found:$accessToken------------------');
         await prefs.setString('loginToken', accessToken);
       }
     } catch (e) {
       debugPrint('Cookies Not Found!');
       accessToken = '';
       if (prefs.get('loginToken') != null) {
-        //TODO: Call remove API
+        //TODO: Call remove playerID API
         prefs.remove('loginToken');
         prefs.setBool('stopTag', false);
       }
     }
     debugPrint(
-        '--------------------------\n Cookies Found: $accessToken\n--------------------------');
+        '--------------------------\n Token Found: $accessToken\n--------------------------');
 
     ///TODO: not working
-    if (accessToken == '' || accessToken == 'null' || accessToken == null) {
+    if (accessToken == '' ||
+        accessToken == 'null' ||
+        accessToken == null ||
+        accessToken != 'ul') {
       //
+      debugPrint('Notification Not calling');
     } else {
       initNotification();
     }
