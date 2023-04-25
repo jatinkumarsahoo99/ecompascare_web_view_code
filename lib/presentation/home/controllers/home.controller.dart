@@ -55,7 +55,10 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     webViewController = WebViewController.fromPlatformCreationParams(params);
 
     if (webViewController.platform is AndroidWebViewController) {
-      webViewController.enableZoom(false);
+      webViewController.setUserAgent(
+        'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Mobile Safari/537.36',
+      );
+
       AndroidWebViewController.enableDebugging(true);
 
       (webViewController.platform as AndroidWebViewController)
@@ -102,6 +105,8 @@ class HomeController extends GetxController with NetworkStateMixin1 {
           onPageFinished: (String url) {
             firstLoad.value = true;
             debugPrint('Page finished loading: $url');
+            webViewController.runJavaScript(
+                'document.documentElement.style.zoom = ${1 / 1.0};');
           },
           onWebResourceError: (WebResourceError error) {
             debugPrint(

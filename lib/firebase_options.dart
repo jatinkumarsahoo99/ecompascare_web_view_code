@@ -50,22 +50,23 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCld2fr6wFLDg66e7PczTK-1sSrUJSUiL8',
-    appId: '1:237487246699:android:ab1ee0f9e74401885ad02e',
-    messagingSenderId: '237487246699',
-    projectId: 'ecompass-care',
-    databaseURL: 'https://ecompass-care-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'ecompass-care.appspot.com',
+    apiKey: 'AIzaSyALYR75RjHj-71iZ0K1O51HJeE8PHlNcZs',
+    appId: '1:229476156455:android:ffe1137e4f3b2b03',
+    messagingSenderId: '229476156455',
+    projectId: 'stearlingaccuries-b1b93',
+    databaseURL: 'https://stearlingaccuries-b1b93.firebaseio.com',
+    storageBucket: 'stearlingaccuries-b1b93.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCqn8-pQ6FeZUG4pjtUpUiIDqMm3mhJH0I',
-    appId: '1:237487246699:ios:8ef6e2c7ae83c4455ad02e',
-    messagingSenderId: '237487246699',
-    projectId: 'ecompass-care',
-    databaseURL: 'https://ecompass-care-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'ecompass-care.appspot.com',
-    iosClientId: '237487246699-lftd2cd60nr7pm3rda8nfquvnq1s69ig.apps.googleusercontent.com',
+    apiKey: 'AIzaSyD7M1BDap-XjpRhOegEk0eSiTcH3bCtMfQ',
+    appId: '1:229476156455:ios:d942d2f312c05611',
+    messagingSenderId: '229476156455',
+    projectId: 'stearlingaccuries-b1b93',
+    databaseURL: 'https://stearlingaccuries-b1b93.firebaseio.com',
+    storageBucket: 'stearlingaccuries-b1b93.appspot.com',
+    androidClientId: '229476156455-cooujqgc6dst7cj5g51gp246ius13enr.apps.googleusercontent.com',
+    iosClientId: '229476156455-l7lk07d10br19q7fpjlh3nkietnevvbr.apps.googleusercontent.com',
     iosBundleId: 'com.sterlingAccuris.ios',
   );
 }

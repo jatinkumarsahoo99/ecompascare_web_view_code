@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "237487246699",
+    "firebase_url": "https://ecompass-care-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "ecompass-care",
     "storage_bucket": "ecompass-care.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "237487246699-l3082n2drupasi5bjsgp9go2e13u6qp0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "237487246699-lftd2cd60nr7pm3rda8nfquvnq1s69ig.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sterlingAccuris.ios"
+              }
             }
           ]
         }

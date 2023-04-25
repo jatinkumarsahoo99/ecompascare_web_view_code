@@ -1,6 +1,6 @@
 import 'package:ecompasscare/firebase_options.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -12,21 +12,24 @@ void main() async {
   var initialRoute = await Routes.initialRoute;
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  var prodInfo = await firebaseGet();
-  debugPrint('------------$prodInfo----------');
-  ConfigEnvironments.currentEnvironments =
-      prodInfo == 'true' ? Environments.PRODUCTION : Environments.DEV;
+  // var prodInfo = await firebaseGet();
+  // debugPrint('------------$prodInfo----------');
+  ConfigEnvironments.currentEnvironments = Environments.PRODUCTION;
+  // ConfigEnvironments.currentEnvironments =
+  //     prodInfo == 'true' ? Environments.PRODUCTION : Environments.DEV;
+
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   runApp(Main(initialRoute));
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
   );
 }
 
-firebaseGet() async {
-  DatabaseReference ref = FirebaseDatabase.instance.ref("prod");
-  DatabaseEvent event = await ref.once();
-  return event.snapshot.value.toString();
-}
+// firebaseGet() async {
+//   DatabaseReference ref = FirebaseDatabase.instance.ref("prod");
+//   DatabaseEvent event = await ref.once();
+//   return event.snapshot.value.toString();
+// }
 
 class Main extends StatefulWidget {
   final String initialRoute;

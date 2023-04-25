@@ -3,21 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>237487246699-lftd2cd60nr7pm3rda8nfquvnq1s69ig.apps.googleusercontent.com</string>
+	<string>229476156455-l7lk07d10br19q7fpjlh3nkietnevvbr.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.237487246699-lftd2cd60nr7pm3rda8nfquvnq1s69ig</string>
+	<string>com.googleusercontent.apps.229476156455-l7lk07d10br19q7fpjlh3nkietnevvbr</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>229476156455-cooujqgc6dst7cj5g51gp246ius13enr.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCqn8-pQ6FeZUG4pjtUpUiIDqMm3mhJH0I</string>
+	<string>AIzaSyD7M1BDap-XjpRhOegEk0eSiTcH3bCtMfQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>237487246699</string>
+	<string>229476156455</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.sterlingAccuris.ios</string>
 	<key>PROJECT_ID</key>
-	<string>ecompass-care</string>
+	<string>stearlingaccuries-b1b93</string>
 	<key>STORAGE_BUCKET</key>
-	<string>ecompass-care.appspot.com</string>
+	<string>stearlingaccuries-b1b93.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +31,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:237487246699:ios:8ef6e2c7ae83c4455ad02e</string>
+	<string>1:229476156455:ios:d942d2f312c05611</string>
 	<key>DATABASE_URL</key>
-	<string>https://ecompass-care-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+	<string>https://stearlingaccuries-b1b93.firebaseio.com</string>
 </dict>
 </plist>

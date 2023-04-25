@@ -19,9 +19,9 @@ class ConfigEnvironments {
     },
     {
       'env': Environments.PRODUCTION,
-      'url': 'https://sterlingaccuris.in?is_app=true',
-      'domain': 'sterlingaccuris.in',
-      'baseAPI': 'https://api.sterlingaccuris.in/api',
+      'url': 'https://sterlingaccuris.com?is_app=true',
+      'domain': 'sterlingaccuris.com',
+      'baseAPI': 'https://api.sterlingaccuris.com/api',
       'OSAppId': 'ee1713d2-e9c2-4bf2-9613-7456d1dad45e'
     },
     {
