@@ -16,5 +16,8 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 <!-- source="$(readlink -f "${source}")" -->
-
 <!-- export PATH="$PATH":"$HOME/.pub-cache/bin" -->
+
+cmd:
+flutter clean && flutter pub get && flutter build appbundle && open build/app/outputs/bundle/release
+flutter clean && flutter pub get && flutter build ios && open ios
