@@ -28,7 +28,7 @@ dependencies:
   firebase_core: ^2.10.0
   photo_view: ^0.14.0
   firebase_analytics: ^10.2.1
-  # flutter_launcher_icons: ^0.12.0
+  flutter_launcher_icons: ^0.12.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -46,11 +46,20 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/lottie/
+    - assets/lottie/lottieSplash.json
     # - assets/audio/
 
-# flutter_icons:
-#   android: "launcher_icon"
-#   ios: false
-#   image_path_android: "assets/extras/icon1.png"
-#   min_sdk_android: 21
+flutter_icons:
+  android: true
+  ios: false
+  image_path: "assets/extras/icon2.png"
+  adaptive_icon_foreground: "assets/extras/icon2.png"
+  adaptive_icon_background: "assets/extras/icon2.png"
+  min_sdk_android: 21 
+  web:
+    generate: false
+  windows:
+    generate: false
+  macos:
+    generate: false
+    
