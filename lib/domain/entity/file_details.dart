@@ -8,13 +8,13 @@ class FileDetails {
   FileDetails.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     code = json['code'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['code'] = this.code;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['success'] = success;
+    data['code'] = code;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -36,10 +36,10 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['document_id'] = this.documentId;
-    data['doc_type'] = this.docType;
-    data['name'] = this.name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['document_id'] = documentId;
+    data['doc_type'] = docType;
+    data['name'] = name;
     return data;
   }
 }

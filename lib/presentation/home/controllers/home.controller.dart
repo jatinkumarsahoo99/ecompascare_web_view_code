@@ -208,7 +208,6 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         accessToken == 'null' ||
         accessToken == null ||
         accessToken != 'ul') {
-      //
       debugPrint('Notification Not calling');
     } else {
       initNotification();
@@ -271,6 +270,11 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     // debugPrint('------------------- $osUserID');
 
     await initWebview();
+    debugPrint(
+        '----------------------\n Check Update Started \n----------------------\n');
+//
+    debugPrint(
+        '----------------------\n Check Update Ended \n----------------------');
     super.onReady();
   }
 
