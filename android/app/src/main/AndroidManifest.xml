@@ -25,6 +25,10 @@
         android:label="Sterling Accuris Diagnostics"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
+        <service
+            android:name="LocationService"
+            android:foregroundServiceType="location">
+        </service>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
