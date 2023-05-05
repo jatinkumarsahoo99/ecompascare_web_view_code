@@ -20,5 +20,6 @@ samples, guidance on mobile development, and a full API reference.
 
 cmd:
 flutter clean && flutter pub get && flutter build appbundle && open build/app/outputs/bundle/release
-flutter clean && flutter pub get && flutter build appbundle && open build/app/outputs/flutter-apk
+flutter clean && flutter pub get && flutter build apk && open build/app/outputs/flutter-apk
 flutter clean && flutter pub get && flutter build ios && open ios
+arch -x86_64 pod install

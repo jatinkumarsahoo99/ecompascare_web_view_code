@@ -40,13 +40,13 @@
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs access to camera to upload profile pic.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs access to location when in the background.</string>
+	<string>The location is used to provides packages based on current location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
+	<string>The location is used to provides packages based on current location.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>This app needs access to camera to upload profile pic.</string>
+	<string>The app needs access to camera to upload profile pic.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs access to photo library to upload profile pic.</string>
+	<string>The app needs access to photo library to upload profile pic.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

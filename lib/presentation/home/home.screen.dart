@@ -46,9 +46,7 @@ class HomeScreen extends GetView<HomeController> {
         shouldPopScope: () => false,
         showIgnore: false,
         countryCode: 'IN',
-
-        ///TODO: remove this
-        debugDisplayAlways: true,
+        // debugDisplayAlways: true,
         // minAppVersion: '2.0.6',
         onUpdate: () {
           launchUrl(

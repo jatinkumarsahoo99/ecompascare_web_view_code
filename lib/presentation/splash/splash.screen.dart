@@ -28,19 +28,19 @@ class SplashScreen extends GetView<SplashController> {
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                color: const Color(0xff6C3F94).withOpacity(0.3),
-                child: Center(
-                  child: Obx(
-                    () => Text(
-                      'Version: ${controller.packageInfo.value.version}(${controller.packageInfo.value.buildNumber})',
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
+            children: const [
+              // Container(
+              //   padding: const EdgeInsets.symmetric(vertical: 5),
+              //   color: const Color(0xff6C3F94).withOpacity(0.3),
+              //   child: Center(
+              //     child: Obx(
+              //       () => Text(
+              //         'Version: ${controller.packageInfo.value.version}(${controller.packageInfo.value.buildNumber})',
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              SizedBox(height: 30),
             ],
           ),
         ],
