@@ -31,13 +31,21 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   RxBool firstLoad = false.obs;
   late final SharedPreferences prefs;
   FileDetails fileDetails = FileDetails();
+  Position loc = Position(
+      longitude: 0.0,
+      latitude: 0.0,
+      timestamp: DateTime.now(),
+      accuracy: 0,
+      altitude: 0,
+      heading: 0,
+      speed: 0,
+      speedAccuracy: 0);
+  RxString testRx = ''.obs;
+  RxString testRx1 = ''.obs;
 
   initParams() async {
     var env = ConfigEnvironments.env['url'];
     debugPrint('\n-----------------------\n$env\n-----------------------\n');
-    debugPrint(
-      'https://${ConfigEnvironments.env['domain']}/patient-portal/notifications?is_app=true',
-    );
 
     prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('stopTag') == null) {
@@ -153,7 +161,13 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       //     );
       //   },
       // )
-      ..loadRequest(Uri.parse(ConfigEnvironments.env['url']));
+      ..loadRequest(loc.longitude != 0.0
+          ? Uri.parse(ConfigEnvironments.env['url'] +
+              '&lat=' +
+              loc.latitude.toString() +
+              '&long=' +
+              loc.longitude.toString())
+          : Uri.parse(ConfigEnvironments.env['url']));
   }
 
   getLocation() async {
@@ -164,13 +178,35 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       } catch (e) {
         debugPrint(e.toString());
       }
-      if (permission == LocationPermission.always ||
+      if (permission == LocationPermission.whileInUse ||
           permission == LocationPermission.whileInUse) {
-        Position loc;
         loc = await Geolocator.getCurrentPosition();
-        debugPrint(loc.toString());
+        debugPrint('--------------\n1. $loc\n--------------');
+      } else {
+        debugPrint('--------------\nLocation Denied\n--------------');
       }
+    } else if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
+      loc = await Geolocator.getCurrentPosition();
+      debugPrint('--------------\n2. $loc\n--------------');
+    } else {
+      debugPrint('--------------\nPermission Denied\n--------------');
     }
+  }
+
+  void localStoreLocation() {
+    Geolocator.getPositionStream().listen((Position streamPos) async {
+      debugPrint('--------------\n Stream: $streamPos\n--------------');
+      try {
+        await webViewController.runJavaScriptReturningResult(
+            "localStorage.setItem('mobileLat',${streamPos.latitude})");
+        await webViewController.runJavaScriptReturningResult(
+            "localStorage.setItem('mobileLong',${streamPos.longitude})");
+      } catch (e) {
+        debugPrint(e.toString());
+        debugPrint('LocalStorage Failed.');
+      }
+    });
   }
 
   void cookieTimer() {
@@ -179,6 +215,15 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   }
 
   Future<void> onListCookies() async {
+    try {
+      testRx.value = await webViewController
+          .runJavaScript("localStorage.getItem('mobileLat')") as String;
+      testRx1.value = await webViewController
+          .runJavaScript("localStorage.getItem('mobileLong')") as String;
+    } catch (e) {
+      debugPrint('exc: $e');
+    }
+
     try {
       accessToken = await webViewController.runJavaScriptReturningResult(
           "localStorage.getItem('access_token')") as String;
@@ -254,8 +299,12 @@ class HomeController extends GetxController with NetworkStateMixin1 {
 
   @override
   void onInit() async {
+    await getLocation();
     await initParams();
-    getLocation();
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
+      localStoreLocation();
+    }
     Timer.periodic(
         const Duration(seconds: 5), (Timer t) => firstLoad.value = true);
     super.onInit();

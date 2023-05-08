@@ -62,30 +62,35 @@ class HomeScreen extends GetView<HomeController> {
       ),
       child: WillPopScope(
         onWillPop: onWillPop,
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Obx(
-            () {
-              return controller.firstLoad.value == false
-                  ? const Center(child: CircularProgressIndicator())
-                  : SafeArea(
-                      top: true,
-                      left: false,
-                      right: false,
-                      bottom: false,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: WebViewWidget(
-                              controller: controller.webViewController,
+        child: Obx(() {
+          return Scaffold(
+            appBar: AppBar(
+                title: Text(controller.testRx.value.toString() +
+                    controller.testRx1.value.toString())),
+            backgroundColor: Colors.white,
+            body: Obx(
+              () {
+                return controller.firstLoad.value == false
+                    ? const Center(child: CircularProgressIndicator())
+                    : SafeArea(
+                        top: true,
+                        left: false,
+                        right: false,
+                        bottom: false,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: WebViewWidget(
+                                controller: controller.webViewController,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-            },
-          ),
-        ),
+                          ],
+                        ),
+                      );
+              },
+            ),
+          );
+        }),
       ),
     );
   }

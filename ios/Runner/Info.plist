@@ -40,9 +40,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs access to camera to upload profile pic.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>The location is used to provides packages based on current location.</string>
+	<string>The device location is used by our system to suggest the nearest Sterling Accuris lab location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>The location is used to provides packages based on current location.</string>
+	<string>The device location is used by our system to suggest the nearest Sterling Accuris lab location.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>The app needs access to camera to upload profile pic.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
