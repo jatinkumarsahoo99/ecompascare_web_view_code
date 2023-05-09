@@ -63,12 +63,13 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     webViewController = WebViewController.fromPlatformCreationParams(params);
 
     if (webViewController.platform is AndroidWebViewController) {
+      ///TODO: Zoom fix;
       webViewController.setUserAgent(
         'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Mobile Safari/537.36',
       );
 
-      AndroidWebViewController.enableDebugging(true);
-
+      // AndroidWebViewController.enableDebugging(true);
+      ///TODO: Zoom fix;
       (webViewController.platform as AndroidWebViewController)
           .setMediaPlaybackRequiresUserGesture(false);
 
@@ -77,7 +78,6 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         (params) async {
           ///TODO: Drop down and image picker
           FilePickerResult? result = await FilePicker.platform.pickFiles();
-
           if (result != null) {
             file = File(result.files.single.path ?? '');
           } else {
@@ -88,19 +88,22 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       );
     }
 
-    await cookieManager.setCookie(
-      WebViewCookie(
-        name: 'is_mobile_app',
-        value: 'true',
-        domain: ConfigEnvironments.env['domain'],
-      ),
-    );
+    //Adding Cookie
+    // await cookieManager.setCookie(
+    //   WebViewCookie(
+    //     name: 'is_mobile_app',
+    //     value: 'true',
+    //     domain: ConfigEnvironments.env['domain'],
+    //   ),
+    // );
   }
 
   initWebview() {
     webViewController
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.transparent)
+
+      ///TODO: Zoom fix;
       ..enableZoom(false)
       ..setNavigationDelegate(
         NavigationDelegate(
@@ -113,6 +116,8 @@ class HomeController extends GetxController with NetworkStateMixin1 {
           onPageFinished: (String url) {
             firstLoad.value = true;
             debugPrint('Page finished loading: $url');
+
+            ///TODO: Zoom fix;
             webViewController.runJavaScript(
                 'document.documentElement.style.zoom = ${1 / 1.0};');
           },
@@ -166,7 +171,9 @@ class HomeController extends GetxController with NetworkStateMixin1 {
               '&lat=' +
               loc.latitude.toString() +
               '&long=' +
-              loc.longitude.toString())
+              loc.longitude.toString() +
+              '&timeStamp=' +
+              DateTime.now().toString())
           : Uri.parse(ConfigEnvironments.env['url']));
   }
 
@@ -198,6 +205,9 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     Geolocator.getPositionStream().listen((Position streamPos) async {
       debugPrint('--------------\n Stream: $streamPos\n--------------');
       try {
+        // await webViewController.runJavaScript("console.log('Testing');");
+        // await webViewController
+        //     .runJavaScript("localStorage.setItem('mobileLat','test')");
         await webViewController.runJavaScriptReturningResult(
             "localStorage.setItem('mobileLat',${streamPos.latitude})");
         await webViewController.runJavaScriptReturningResult(
@@ -249,10 +259,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         '--------------------------\n Token Found: $accessToken\n--------------------------');
 
     ///TODO: not working
-    if (accessToken == '' ||
-        accessToken == 'null' ||
-        accessToken == null ||
-        accessToken != 'ul') {
+    if (accessToken == 'ul') {
       debugPrint('Notification Not calling');
     } else {
       initNotification();
@@ -313,17 +320,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   @override
   void onReady() async {
     cookieTimer();
-
-    // final status = await OneSignal.shared.getDeviceState();
-    // final String? osUserID = status?.userId;
-    // debugPrint('------------------- $osUserID');
-
     await initWebview();
-    debugPrint(
-        '----------------------\n Check Update Started \n----------------------\n');
-//
-    debugPrint(
-        '----------------------\n Check Update Ended \n----------------------');
     super.onReady();
   }
 
