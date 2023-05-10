@@ -35,6 +35,8 @@
 		<string>sms</string>
 		<string>tel</string>
 	</array>
+	<key>NSAllowsLocalNetworking</key>
+	<true/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
