@@ -60,8 +60,7 @@ class SplashScreen extends GetView<SplashController> {
                                     ),
                                     const SizedBox(height: 20),
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         TextButton(
                                           onPressed: () {
@@ -71,17 +70,7 @@ class SplashScreen extends GetView<SplashController> {
                                                 'localshowConsent', false);
                                             Get.offAllNamed(Routes.HOME);
                                           },
-                                          child: const Text('Deny'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            controller.showConsent.value =
-                                                false;
-                                            controller.prefs.setBool(
-                                                'localshowConsent', false);
-                                            Get.offAllNamed(Routes.HOME);
-                                          },
-                                          child: const Text('Accept'),
+                                          child: const Text('OK'),
                                         )
                                       ],
                                     ),

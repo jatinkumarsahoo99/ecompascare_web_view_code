@@ -29,3 +29,15 @@ cd ios && arch -x86_64 pod install && cd ..
 <key>NSAllowsLocalNetworking</key>
 <true/>
 </dict>
+
+I/flutter (15224): --------------------------
+D/CCodec (15224): allocate(c2.goldfish.h264.decoder)
+I/chromium(15224): [INFO:CONSOLE(14)] "Warning: Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.%s
+I/chromium(15224):
+I/chromium(15224): Check the render method of `MyApp`.
+I/chromium(15224): at div
+I/chromium(15224): at MyApp (<anonymous>:41:31)", source: https://sterlingaccuris.com/static-assets/js/unpkg/react.development.js (14)
+I/CCodec (15224): setting up 'default' as default (vendor) store
+I/flutter (15224): calling init noti
+I/flutter (15224): WebView is loading (progress : 100%)
+I/CCodec (15224): Created component [c2.goldfish.h264.decoder]

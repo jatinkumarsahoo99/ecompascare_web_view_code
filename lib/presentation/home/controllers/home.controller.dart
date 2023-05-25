@@ -57,6 +57,10 @@ class HomeController extends GetxController with NetworkStateMixin1 {
 
   @override
   void onReady() async {
+    ///TODO: Remove in next build
+    if (prefs.getBool('stop1Tag') != null) {
+      prefs.remove('stopTag');
+    }
     cookieTimer();
     await initWebview();
     super.onReady();
@@ -70,8 +74,8 @@ class HomeController extends GetxController with NetworkStateMixin1 {
 
   initParams() async {
     prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool('stopTag') == null) {
-      await prefs.setBool('stopTag', false);
+    if (prefs.getBool('notiSync') == null) {
+      await prefs.setBool('notiSync', false);
     }
 
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
@@ -287,7 +291,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       if (prefs.get('loginToken') != null) {
         //TODO: Call remove playerID API
         prefs.remove('loginToken');
-        prefs.setBool('stopTag', false);
+        prefs.setBool('notiSync', false);
       }
     }
     debugPrint(
@@ -328,11 +332,9 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     OneSignal.shared.setNotificationWillShowInForegroundHandler(
         (OSNotificationReceivedEvent event) {
       debugPrint('FOREGROUND HANDLER CALLED WITH: $event');
-
-      /// Display Notification, send null to not display
-      event.complete(null);
+      event.complete(event.notification);
     });
-    if (prefs.getBool('stopTag') == false) {
+    if (prefs.getBool('notiSync') == false) {
       debugPrint('calling init noti');
       OneSignal.shared.setAppId(oneSignalAppId);
       OneSignal.shared
@@ -342,12 +344,14 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       });
 
       deviceState = await OneSignal.shared.getDeviceState();
-      if (deviceState != null) {
+
+      debugPrint('Device ID before: ${deviceState?.userId}');
+      if (deviceState?.userId != null) {
         String resp = await playerIDMap(accessToken, deviceState?.userId ?? '');
         debugPrint('Device ID: ${deviceState?.userId}');
         debugPrint('API Response: $resp');
         if (resp == '200') {
-          await prefs.setBool('stopTag', true);
+          await prefs.setBool('notiSync', true);
         }
       }
     }
