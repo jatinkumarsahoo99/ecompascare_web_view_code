@@ -1,4 +1,5 @@
 import 'package:ecompasscare/infrastructure/consts/asset_consts.dart';
+import 'package:ecompasscare/infrastructure/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -26,23 +27,75 @@ class SplashScreen extends GetView<SplashController> {
             ],
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: const [
-              // Container(
-              //   padding: const EdgeInsets.symmetric(vertical: 5),
-              //   color: const Color(0xff6C3F94).withOpacity(0.3),
-              //   child: Center(
-              //     child: Obx(
-              //       () => Text(
-              //         'Version: ${controller.packageInfo.value.version}(${controller.packageInfo.value.buildNumber})',
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              SizedBox(height: 30),
+            children: [
+              Center(
+                child: Obx(
+                  () {
+                    return controller.showConsent.value
+                        ? Container(
+                            height: Get.height,
+                            width: Get.width,
+                            color: Colors.black87,
+                            alignment: Alignment.center,
+                            child: Container(
+                              height: 300,
+                              width: 330,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 30,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      controller.dialogContent.value.toString(),
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () {
+                                            controller.showConsent.value =
+                                                false;
+                                            controller.prefs.setBool(
+                                                'localshowConsent', false);
+                                            Get.offAllNamed(Routes.HOME);
+                                          },
+                                          child: const Text('Deny'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            controller.showConsent.value =
+                                                false;
+                                            controller.prefs.setBool(
+                                                'localshowConsent', false);
+                                            Get.offAllNamed(Routes.HOME);
+                                          },
+                                          child: const Text('Accept'),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink();
+                  },
+                ),
+              )
             ],
-          ),
+          )
         ],
       ),
     );

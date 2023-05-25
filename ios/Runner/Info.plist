@@ -35,20 +35,24 @@
 		<string>sms</string>
 		<string>tel</string>
 	</array>
+	<key>OneSignal_suppress_launch_urls</key>
+	<true/>
 	<key>NSAllowsLocalNetworking</key>
 	<true/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>This app needs access to camera to upload profile pic.</string>
+	<string>The camera access is used by our system to upload profile pic and health records.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
+	<string>The device location is used by our system to suggest the nearest Sterling Accuris lab location.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>The device location is used by our system to suggest the nearest Sterling Accuris lab location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>The device location is used by our system to suggest the nearest Sterling Accuris lab location.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>The app needs access to camera to upload profile pic.</string>
+	<string>The microphone access along with camera access is used by our system to upload profile pic and health records.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>The app needs access to photo library to upload profile pic.</string>
+	<string>The photo library access is used by our system to upload profile pic and health records.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

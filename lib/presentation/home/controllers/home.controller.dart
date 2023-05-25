@@ -16,8 +16,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 
-///TODO: ios notification setup
-
 class HomeController extends GetxController with NetworkStateMixin1 {
   late LocationPermission permission;
   late final PlatformWebViewControllerCreationParams params;
@@ -40,13 +38,37 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       heading: 0,
       speed: 0,
       speedAccuracy: 0);
-  RxString testRx = ''.obs;
-  RxString testRx1 = ''.obs;
+
+  @override
+  void onInit() async {
+    await getLocation();
+    await initParams();
+    Timer.periodic(
+        const Duration(seconds: 5), (Timer t) => firstLoad.value = true);
+    try {
+      await webViewController.runJavaScriptReturningResult(
+          "localStorage.setItem('myData', 'Hello World!');");
+    } catch (e) {
+      debugPrint('Error: $e');
+    }
+
+    super.onInit();
+  }
+
+  @override
+  void onReady() async {
+    cookieTimer();
+    await initWebview();
+    super.onReady();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
 
   initParams() async {
-    var env = ConfigEnvironments.env['url'];
-    debugPrint('\n-----------------------\n$env\n-----------------------\n');
-
     prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('stopTag') == null) {
       await prefs.setBool('stopTag', false);
@@ -68,7 +90,6 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Mobile Safari/537.36',
       );
 
-      // AndroidWebViewController.enableDebugging(true);
       ///TODO: Zoom fix;
       (webViewController.platform as AndroidWebViewController)
           .setMediaPlaybackRequiresUserGesture(false);
@@ -88,7 +109,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       );
     }
 
-    //Adding Cookie
+    ///Adding Cookie
     // await cookieManager.setCookie(
     //   WebViewCookie(
     //     name: 'is_mobile_app',
@@ -205,15 +226,34 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     Geolocator.getPositionStream().listen((Position streamPos) async {
       debugPrint('--------------\n Stream: $streamPos\n--------------');
       try {
-        // await webViewController.runJavaScript("console.log('Testing');");
+        ///Not working in iOS
         // await webViewController
         //     .runJavaScript("localStorage.setItem('mobileLat','test')");
+        // await webViewController
+        //     .runJavaScript("localStorage.setItem('mobileLat','test')");
+        //  await webViewController.runJavaScript(
+        //     "document.getElementsByClassName('someclassname')[0]");
+
+        ///Working
+        // debugPrint('Working');
+        // await webViewController.runJavaScript('console.log("Test")');
+
+        ///Testing
+        // debugPrint('Testing');
+        // await webViewController.runJavaScript(
+        //   'caches.open("test_caches_entry"); localStorage["test_localStorage"] = "dummy_entry";',
+        // );
+        // await webViewController.runJavaScriptReturningResult(
+        //     "localStorage.setItem('myData', 'Hello World!');");
+        // debugPrint('----------------------');
+
+        ///Working in Android
         await webViewController.runJavaScriptReturningResult(
             "localStorage.setItem('mobileLat',${streamPos.latitude})");
         await webViewController.runJavaScriptReturningResult(
             "localStorage.setItem('mobileLong',${streamPos.longitude})");
       } catch (e) {
-        debugPrint(e.toString());
+        debugPrint('Error: $e');
         debugPrint('LocalStorage Failed.');
       }
     });
@@ -226,24 +266,19 @@ class HomeController extends GetxController with NetworkStateMixin1 {
 
   Future<void> onListCookies() async {
     try {
-      testRx.value = await webViewController
-          .runJavaScript("localStorage.getItem('mobileLat')") as String;
-      testRx1.value = await webViewController
-          .runJavaScript("localStorage.getItem('mobileLong')") as String;
-    } catch (e) {
-      debugPrint('exc: $e');
-    }
-
-    try {
       accessToken = await webViewController.runJavaScriptReturningResult(
           "localStorage.getItem('access_token')") as String;
       debugPrint('$accessToken------------------');
-      accessToken = accessToken.substring(1, accessToken.length - 1);
+
+      ///Android comes with extra " in the beginning and end.
+      if (Platform.isAndroid) {
+        accessToken = accessToken.substring(1, accessToken.length - 1);
+      }
       if (accessToken == 'ul') {
         debugPrint('Null');
         accessToken = '';
       } else {
-        debugPrint('Not found:$accessToken------------------');
+        debugPrint('Found:$accessToken------------------');
         await prefs.setString('loginToken', accessToken);
       }
     } catch (e) {
@@ -259,7 +294,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         '--------------------------\n Token Found: $accessToken\n--------------------------');
 
     ///TODO: not working
-    if (accessToken == 'ul') {
+    if (accessToken == 'ul' || accessToken == '') {
       debugPrint('Notification Not calling');
     } else {
       initNotification();
@@ -267,6 +302,36 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   }
 
   Future<void> initNotification() async {
+    OneSignal.shared
+        .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+      debugPrint(
+        'NOTIFICATION OPENED HANDLER CALLED WITH: $result ${result.notification.launchUrl}',
+      );
+      webViewController.loadRequest(
+        ///TODO: fix in android
+        // Uri.parse(
+        //   'https://${ConfigEnvironments.env['domain']}/patient-portal/notifications?is_app=true',
+        // ),
+
+        ///TODO: working in iOS
+        Uri.parse(
+          result.notification.launchUrl?.isNotEmpty ?? false
+              ? loc.longitude != 0.0
+                  ? '${result.notification.launchUrl}?is_app=true&lat=${loc.latitude}&long=${loc.longitude}&timeStamp=${DateTime.now()}'
+                  : '${result.notification.launchUrl}?is_app=true'
+              : loc.longitude != 0.0
+                  ? 'https://${ConfigEnvironments.env['domain']}/patient-portal/notifications?is_app=true'
+                  : 'https://${ConfigEnvironments.env['domain']}/patient-portal/notifications?is_app=true&lat=${loc.latitude}&long=${loc.longitude}&timeStamp=${DateTime.now()}',
+        ),
+      );
+    });
+    OneSignal.shared.setNotificationWillShowInForegroundHandler(
+        (OSNotificationReceivedEvent event) {
+      debugPrint('FOREGROUND HANDLER CALLED WITH: $event');
+
+      /// Display Notification, send null to not display
+      event.complete(null);
+    });
     if (prefs.getBool('stopTag') == false) {
       debugPrint('calling init noti');
       OneSignal.shared.setAppId(oneSignalAppId);
@@ -275,26 +340,10 @@ class HomeController extends GetxController with NetworkStateMixin1 {
           .then((accepted) {
         //
       });
-      OneSignal.shared
-          .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
-        debugPrint('NOTIFICATION OPENED HANDLER CALLED WITH: $result');
-        webViewController.loadRequest(
-          Uri.parse(
-            'https://${ConfigEnvironments.env['domain']}/patient-portal/notifications?is_app=true',
-          ),
-        );
-      });
-      // OneSignal.shared.setNotificationWillShowInForegroundHandler(
-      //     (OSNotificationReceivedEvent event) {
-      //   debugPrint('FOREGROUND HANDLER CALLED WITH: $event');
 
-      //   /// Display Notification, send null to not display
-      //   event.complete(null);
-      // });
       deviceState = await OneSignal.shared.getDeviceState();
       if (deviceState != null) {
         String resp = await playerIDMap(accessToken, deviceState?.userId ?? '');
-
         debugPrint('Device ID: ${deviceState?.userId}');
         debugPrint('API Response: $resp');
         if (resp == '200') {
@@ -302,31 +351,5 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         }
       }
     }
-  }
-
-  @override
-  void onInit() async {
-    await getLocation();
-    await initParams();
-    if (permission == LocationPermission.always ||
-        permission == LocationPermission.whileInUse) {
-      localStoreLocation();
-    }
-    Timer.periodic(
-        const Duration(seconds: 5), (Timer t) => firstLoad.value = true);
-    super.onInit();
-  }
-
-  @override
-  void onReady() async {
-    cookieTimer();
-    await initWebview();
-    super.onReady();
-  }
-
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
   }
 }

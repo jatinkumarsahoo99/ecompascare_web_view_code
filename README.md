@@ -23,3 +23,9 @@ flutter clean && flutter pub get && flutter build appbundle && open build/app/ou
 flutter clean && flutter pub get && flutter build apk && open build/app/outputs/flutter-apk
 flutter clean && flutter pub get && flutter build ios && cd ios && xed . && cd ..
 cd ios && arch -x86_64 pod install && cd ..
+
+<key>NSAppTransportSecurity</key>
+<dict>
+<key>NSAllowsLocalNetworking</key>
+<true/>
+</dict>

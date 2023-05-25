@@ -46,8 +46,7 @@ class HomeScreen extends GetView<HomeController> {
         shouldPopScope: () => false,
         showIgnore: false,
         countryCode: 'IN',
-        // debugDisplayAlways: true,
-        // minAppVersion: '2.0.6',
+        minAppVersion: '2.2.2',
         onUpdate: () {
           launchUrl(
             Uri.parse(
@@ -90,13 +89,3 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 }
-
-// class DialogExample extends StatelessWidget {
-//   const DialogExample({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return 
-//     Get.dialog(Text('data'));
-//   }
-// }

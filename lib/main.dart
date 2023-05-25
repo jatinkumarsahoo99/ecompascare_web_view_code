@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:upgrader/upgrader.dart';
 import 'infrastructure/config.dart';
 import 'infrastructure/navigation/navigation.dart';
 import 'infrastructure/navigation/routes.dart';
@@ -14,27 +13,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // var prodInfo = await firebaseGet();
-  // debugPrint('------------$prodInfo----------');
   ConfigEnvironments.currentEnvironments = Environments.PRODUCTION;
-  // ConfigEnvironments.currentEnvironments =
-  //     prodInfo == 'true' ? Environments.PRODUCTION : Environments.DEV;
-
-  // Only call clearSavedSettings() during testing to reset internal values.
-  await Upgrader.clearSavedSettings(); // REMOVE this for release builds
-
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   runApp(Main(initialRoute));
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
   );
 }
-
-// firebaseGet() async {
-//   DatabaseReference ref = FirebaseDatabase.instance.ref("prod");
-//   DatabaseEvent event = await ref.once();
-//   return event.snapshot.value.toString();
-// }
 
 class Main extends StatefulWidget {
   final String initialRoute;

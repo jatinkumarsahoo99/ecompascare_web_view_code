@@ -1,56 +1,62 @@
+import 'dart:io';
 import 'package:ecompasscare/infrastructure/navigation/routes.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashController extends GetxController {
-  final double height = Get.height;
-  final double width = Get.width;
   final bool repeat = false;
+  RxBool showConsent = false.obs;
+  RxString dialogContent = ''.obs;
 
-  final Rx<PackageInfo> packageInfo = Rx<PackageInfo>(PackageInfo(
-    appName: '',
-    packageName: '',
-    version: '',
-    buildNumber: '',
-    buildSignature: '',
-    installerStore: '',
-  ));
-
-  void splashTimer() async {
-    await Future.delayed(const Duration(milliseconds: 5000)).then(
-      (value) {
-        Get.offAllNamed(Routes.HOME);
-      },
-    );
-  }
-
-  Future<void> initPackageInfo() async {
-    packageInfo.value = await PackageInfo.fromPlatform();
-  }
-
-  // playSound() async {
-  //   final player = AudioPlayer();
-  //   try {
-  //     await player.setAsset(AssetConsts.audioSplash);
-  //     player.play();
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //   }
-  // }
+  late final SharedPreferences prefs;
 
   @override
   void onReady() {
     splashTimer();
-    // playSound();
+    firebaseRead();
     super.onReady();
-    debugPrint(
-        'Name: ${packageInfo.value.appName} \n Build: ${packageInfo.value.buildNumber} \n Version: ${packageInfo.value.version}');
   }
 
   @override
   Future<void> onInit() async {
-    await initPackageInfo();
+    prefs = await SharedPreferences.getInstance();
     super.onInit();
+  }
+
+  void splashTimer() async {
+    await Future.delayed(const Duration(milliseconds: 5000)).then(
+      (value) async {
+        await firebaseRead();
+        if (showConsent.value == false) {
+          Get.offAllNamed(Routes.HOME);
+        }
+      },
+    );
+  }
+
+  firebaseRead() async {
+    var consentVisibility = await firebaseGet("consentVisibility");
+    debugPrint('------------$consentVisibility----------');
+    if (Platform.isAndroid) {
+      if (consentVisibility.toString() == 'true') {
+        if (prefs.getBool('localshowConsent') == null) {
+          debugPrint('1. visible true');
+          dialogContent.value = await firebaseGet("content");
+          showConsent.value = true;
+        }
+      } else {
+        debugPrint('1. visible false');
+        showConsent.value = false;
+      }
+    }
+  }
+
+  firebaseGet(String value) async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref(value);
+    DatabaseEvent event = await ref.once();
+    return event.snapshot.value.toString();
   }
 }
