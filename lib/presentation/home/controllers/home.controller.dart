@@ -312,21 +312,9 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         'NOTIFICATION OPENED HANDLER CALLED WITH: $result ${result.notification.launchUrl}',
       );
       webViewController.loadRequest(
-        ///TODO: fix in android
-        // Uri.parse(
-        //   'https://${ConfigEnvironments.env['domain']}/patient-portal/notifications?is_app=true',
-        // ),
-
-        ///TODO: working in iOS
-        Uri.parse(
-          result.notification.launchUrl?.isNotEmpty ?? false
-              ? loc.longitude != 0.0
-                  ? '${result.notification.launchUrl}?is_app=true&lat=${loc.latitude}&long=${loc.longitude}&timeStamp=${DateTime.now()}'
-                  : '${result.notification.launchUrl}?is_app=true'
-              : loc.longitude != 0.0
-                  ? 'https://${ConfigEnvironments.env['domain']}/patient-portal/notifications?is_app=true'
-                  : 'https://${ConfigEnvironments.env['domain']}/patient-portal/notifications?is_app=true&lat=${loc.latitude}&long=${loc.longitude}&timeStamp=${DateTime.now()}',
-        ),
+        Uri.parse(result.notification.launchUrl?.isNotEmpty ?? false
+            ? '${result.notification.launchUrl}'
+            : 'https://${ConfigEnvironments.env['domain']}/patient-portal/notifications'),
       );
     });
     OneSignal.shared.setNotificationWillShowInForegroundHandler(

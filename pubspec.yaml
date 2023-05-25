@@ -1,8 +1,8 @@
 name: ecompasscare
 # android
-version: 2.2.3+239
+version: 2.2.4+241
 # iOS
-# version: 2.2.3+1
+# version: 2.2.4+1
 publish_to: none
 description: A new Flutter project.
 environment:
