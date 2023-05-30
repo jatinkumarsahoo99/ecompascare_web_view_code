@@ -25,6 +25,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   Timer? timer;
   late OSDeviceState? deviceState;
   String accessToken = '';
+  bool clearStorage = false;
   File? file;
   RxBool firstLoad = false.obs;
   late final SharedPreferences prefs;
@@ -58,7 +59,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   @override
   void onReady() async {
     ///TODO: Remove in next build
-    if (prefs.getBool('stop1Tag') != null) {
+    if (prefs.getBool('stopTag') != null) {
       prefs.remove('stopTag');
     }
     cookieTimer();
@@ -135,7 +136,20 @@ class HomeController extends GetxController with NetworkStateMixin1 {
           onProgress: (int progress) {
             debugPrint('WebView is loading (progress : $progress%)');
           },
-          onPageStarted: (String url) {
+          onPageStarted: (String url) async {
+            if (clearStorage == false) {
+              try {
+                await webViewController.runJavaScript(
+                    "localStorage.removeItem('mobile_current_location')");
+                await webViewController
+                    .runJavaScript("localStorage.removeItem('selected_city')");
+                await webViewController.runJavaScript(
+                    "localStorage.removeItem('selected_location')");
+                clearStorage = true;
+              } catch (e) {
+                debugPrint('ERROR: $e');
+              }
+            }
             debugPrint('Page started loading: $url');
           },
           onPageFinished: (String url) {
@@ -252,9 +266,9 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         // debugPrint('----------------------');
 
         ///Working in Android
-        await webViewController.runJavaScriptReturningResult(
+        await webViewController.runJavaScript(
             "localStorage.setItem('mobileLat',${streamPos.latitude})");
-        await webViewController.runJavaScriptReturningResult(
+        await webViewController.runJavaScript(
             "localStorage.setItem('mobileLong',${streamPos.longitude})");
       } catch (e) {
         debugPrint('Error: $e');
