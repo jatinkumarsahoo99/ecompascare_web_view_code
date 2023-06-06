@@ -507,7 +507,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.5;
+				MARKETING_VERSION = 2.2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sterlingAccuris.ios;
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier1)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -755,7 +755,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.5;
+				MARKETING_VERSION = 2.2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sterlingAccuris.ios;
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier1)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -787,7 +787,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.5;
+				MARKETING_VERSION = 2.2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sterlingAccuris.ios;
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier1)";
 				PRODUCT_NAME = "$(TARGET_NAME)";

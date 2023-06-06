@@ -30,6 +30,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   RxBool firstLoad = false.obs;
   late final SharedPreferences prefs;
   FileDetails fileDetails = FileDetails();
+  bool serviceEnabled = false;
   Position loc = Position(
       longitude: 0.0,
       latitude: 0.0,
@@ -217,6 +218,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   }
 
   getLocation() async {
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       try {
@@ -225,14 +227,14 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         debugPrint(e.toString());
       }
       if (permission == LocationPermission.whileInUse ||
-          permission == LocationPermission.whileInUse) {
+          permission == LocationPermission.whileInUse && serviceEnabled) {
         loc = await Geolocator.getCurrentPosition();
         debugPrint('--------------\n1. $loc\n--------------');
       } else {
         debugPrint('--------------\nLocation Denied\n--------------');
       }
     } else if (permission == LocationPermission.always ||
-        permission == LocationPermission.whileInUse) {
+        permission == LocationPermission.whileInUse && serviceEnabled) {
       loc = await Geolocator.getCurrentPosition();
       debugPrint('--------------\n2. $loc\n--------------');
     } else {
