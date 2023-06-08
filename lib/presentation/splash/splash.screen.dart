@@ -48,17 +48,22 @@ class SplashScreen extends GetView<SplashController> {
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 20,
-                                  vertical: 30,
+                                  vertical: 20,
                                 ),
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      controller.dialogContent.value.toString(),
-                                      style: const TextStyle(fontSize: 20),
+                                    Expanded(
+                                      child: SingleChildScrollView(
+                                        child: Text(
+                                          controller.dialogContent.value
+                                              .toString(),
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
+                                      ),
                                     ),
-                                    const SizedBox(height: 20),
+                                    const SizedBox(height: 10),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
