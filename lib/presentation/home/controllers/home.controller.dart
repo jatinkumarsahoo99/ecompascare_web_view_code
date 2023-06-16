@@ -47,22 +47,11 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     await initParams();
     Timer.periodic(
         const Duration(seconds: 5), (Timer t) => firstLoad.value = true);
-    try {
-      await webViewController.runJavaScriptReturningResult(
-          "localStorage.setItem('myData', 'Hello World!');");
-    } catch (e) {
-      debugPrint('Error: $e');
-    }
-
     super.onInit();
   }
 
   @override
   void onReady() async {
-    ///TODO: Remove in next build
-    if (prefs.getBool('stopTag') != null) {
-      prefs.remove('stopTag');
-    }
     cookieTimer();
     await initWebview();
     super.onReady();
@@ -217,26 +206,58 @@ class HomeController extends GetxController with NetworkStateMixin1 {
           : Uri.parse(ConfigEnvironments.env['url']));
   }
 
+  // getLocation() async {
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     try {
+  //       permission = await Geolocator.requestPermission();
+  //     } catch (e) {
+  //       debugPrint(e.toString());
+  //     }
+  //     if (permission == LocationPermission.whileInUse ||
+  //         permission == LocationPermission.whileInUse && serviceEnabled) {
+  //       loc = await Geolocator.getCurrentPosition();
+  //       debugPrint('--------------\n1. $loc\n--------------');
+  //     } else {
+  //       debugPrint('--------------\nLocation Denied\n--------------');
+  //     }
+  //   } else if (permission == LocationPermission.always ||
+  //       permission == LocationPermission.whileInUse && serviceEnabled) {
+  //     loc = await Geolocator.getCurrentPosition();
+  //     debugPrint('--------------\n2. $loc\n--------------');
+  //   } else {
+  //     debugPrint('--------------\nPermission Denied\n--------------');
+  //   }
+  // }
+
   getLocation() async {
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
     permission = await Geolocator.checkPermission();
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (permission == LocationPermission.denied) {
       try {
         permission = await Geolocator.requestPermission();
+        serviceEnabled = await Geolocator.isLocationServiceEnabled();
       } catch (e) {
         debugPrint(e.toString());
       }
-      if (permission == LocationPermission.whileInUse ||
-          permission == LocationPermission.whileInUse && serviceEnabled) {
+      if ((permission == LocationPermission.whileInUse ||
+              permission == LocationPermission.whileInUse) &&
+          serviceEnabled) {
         loc = await Geolocator.getCurrentPosition();
         debugPrint('--------------\n1. $loc\n--------------');
       } else {
         debugPrint('--------------\nLocation Denied\n--------------');
       }
     } else if (permission == LocationPermission.always ||
-        permission == LocationPermission.whileInUse && serviceEnabled) {
-      loc = await Geolocator.getCurrentPosition();
-      debugPrint('--------------\n2. $loc\n--------------');
+        permission == LocationPermission.whileInUse) {
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (serviceEnabled) {
+        loc = await Geolocator.getCurrentPosition();
+        debugPrint('--------------\n2. $loc\n--------------');
+      } else {
+        debugPrint('--------------\nLocation is OFF\n--------------');
+      }
     } else {
       debugPrint('--------------\nPermission Denied\n--------------');
     }
