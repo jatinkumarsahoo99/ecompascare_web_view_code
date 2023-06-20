@@ -13,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  ConfigEnvironments.currentEnvironments = Environments.DEV;
+  ConfigEnvironments.currentEnvironments = Environments.PRODUCTION;
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   runApp(Main(initialRoute));
   SystemChrome.setPreferredOrientations(
