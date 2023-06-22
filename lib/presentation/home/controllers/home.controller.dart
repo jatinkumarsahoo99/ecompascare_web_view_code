@@ -43,6 +43,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
 
   @override
   void onInit() async {
+    await initNotification();
     await getLocation();
     await initParams();
     Timer.periodic(
@@ -113,6 +114,15 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     //   ),
     // );
   }
+
+  // initNotification() {
+  //   String oneSignalAppId = ConfigEnvironments.env['OSAppId'];
+  //   debugPrint('calling init noti');
+  //   OneSignal.shared.setAppId(oneSignalAppId);
+  //   OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+  //     //
+  //   });
+  // }
 
   initWebview() {
     webViewController
@@ -338,11 +348,30 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     if (accessToken == 'ul' || accessToken == '') {
       debugPrint('Notification Not calling');
     } else {
-      initNotification();
+      // initNotification();
+      if (prefs.getBool('notiSync') == false) {
+        debugPrint('calling Player ID sync');
+        deviceState = await OneSignal.shared.getDeviceState();
+        debugPrint('Device ID before: ${deviceState?.userId}');
+        if (deviceState?.userId != null) {
+          String resp =
+              await playerIDMap(accessToken, deviceState?.userId ?? '');
+          debugPrint('Device ID: ${deviceState?.userId}');
+          debugPrint('API Response: $resp');
+          if (resp == '200') {
+            await prefs.setBool('notiSync', true);
+          }
+        }
+      }
     }
   }
 
   Future<void> initNotification() async {
+    debugPrint('calling init noti');
+    OneSignal.shared.setAppId(oneSignalAppId);
+    OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+      //
+    });
     OneSignal.shared
         .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
       debugPrint(
@@ -359,26 +388,5 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       debugPrint('FOREGROUND HANDLER CALLED WITH: $event');
       event.complete(event.notification);
     });
-    if (prefs.getBool('notiSync') == false) {
-      debugPrint('calling init noti');
-      OneSignal.shared.setAppId(oneSignalAppId);
-      OneSignal.shared
-          .promptUserForPushNotificationPermission()
-          .then((accepted) {
-        //
-      });
-
-      deviceState = await OneSignal.shared.getDeviceState();
-
-      debugPrint('Device ID before: ${deviceState?.userId}');
-      if (deviceState?.userId != null) {
-        String resp = await playerIDMap(accessToken, deviceState?.userId ?? '');
-        debugPrint('Device ID: ${deviceState?.userId}');
-        debugPrint('API Response: $resp');
-        if (resp == '200') {
-          await prefs.setBool('notiSync', true);
-        }
-      }
-    }
   }
 }
