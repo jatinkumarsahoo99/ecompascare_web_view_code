@@ -5,10 +5,11 @@ import 'package:ecompasscare/dal/services/remote_db.dart';
 import 'package:ecompasscare/domain/entity/file_details.dart';
 import 'package:ecompasscare/infrastructure/config.dart';
 import 'package:ecompasscare/infrastructure/navigation/routes.dart';
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -32,17 +33,20 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   FileDetails fileDetails = FileDetails();
   bool serviceEnabled = false;
   Position loc = Position(
-      longitude: 0.0,
-      latitude: 0.0,
-      timestamp: DateTime.now(),
-      accuracy: 0,
-      altitude: 0,
-      heading: 0,
-      speed: 0,
-      speedAccuracy: 0);
+    longitude: 0.0,
+    latitude: 0.0,
+    timestamp: DateTime.now(),
+    accuracy: 0,
+    altitude: 0,
+    heading: 0,
+    speed: 0,
+    speedAccuracy: 0,
+  );
+  File pickedImage = File('');
 
   @override
   void onInit() async {
+    accessToken = '';
     await initNotification();
     await getLocation();
     await initParams();
@@ -63,6 +67,41 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     timer?.cancel();
     super.dispose();
   }
+
+  openPicker(ImageSource source) async {
+    pickedImage = (await ImagePicker().pickImage(source: source)) as File;
+    Get.back();
+    debugPrint('##########');
+    debugPrint(pickedImage.toString());
+    debugPrint('##########');
+    return pickedImage;
+  }
+
+  openDialog(BuildContext context) {
+    debugPrint('statement');
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Column(
+          children: [
+            ListTile(
+              title: const Text("Open Camera"),
+              onTap: () {
+                openPicker(ImageSource.camera);
+              },
+            ),
+            ListTile(
+              title: const Text("Take From Gallery"),
+              onTap: () {
+                openPicker(ImageSource.gallery);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  // openDialog() {}
 
   initParams() async {
     prefs = await SharedPreferences.getInstance();
@@ -93,14 +132,20 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       (webViewController.platform as AndroidWebViewController)
           .setOnShowFileSelector(
         (params) async {
-          ///TODO: Drop down and image picker
-          FilePickerResult? result = await FilePicker.platform.pickFiles();
-          if (result != null) {
-            file = File(result.files.single.path ?? '');
-          } else {
-            return [];
-          }
-          return [(file?.uri).toString()];
+          debugPrint('FileSelector Clicked.........');
+          openDialog;
+          debugPrint('FileSelector Clicked Over.........');
+
+          return [];
+
+          // ///TODO: Drop down and image picker
+          // FilePickerResult? result = await FilePicker.platform.pickFiles();
+          // if (result != null) {
+          //   file = File(result.files.single.path ?? '');
+          // } else {
+          //   return [];
+          // }
+          // return [(file?.uri).toString()];
         },
       );
     }
