@@ -43,7 +43,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     speedAccuracy: 0,
   );
   File? pickedFile;
-  ImageSource iSource = ImageSource.gallery;
+  ImageSource? iSource;
 
   @override
   void onInit() async {
@@ -98,6 +98,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       (webViewController.platform as AndroidWebViewController)
           .setOnShowFileSelector(
         (params) async {
+          pickedFile = null;
           await Get.bottomSheet(
             Container(
               height: 200,
@@ -128,11 +129,13 @@ class HomeController extends GetxController with NetworkStateMixin1 {
               if (iSource == ImageSource.camera)
                 {
                   pickedFile = File(
-                    (await ImagePicker().pickImage(source: iSource))?.path ??
+                    (await ImagePicker().pickImage(
+                                source: iSource ?? ImageSource.camera))
+                            ?.path ??
                         '',
                   )
                 }
-              else
+              else if (iSource == ImageSource.gallery)
                 {
                   pickedFile = File(
                     (await FilePicker.platform.pickFiles())
@@ -144,6 +147,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
                 }
             },
           );
+          iSource = null;
 
           if (pickedFile != null) {
             return [(pickedFile?.uri).toString()];
