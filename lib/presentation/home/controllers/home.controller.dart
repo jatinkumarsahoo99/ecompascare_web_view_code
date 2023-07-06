@@ -5,6 +5,7 @@ import 'package:ecompasscare/dal/services/remote_db.dart';
 import 'package:ecompasscare/domain/entity/file_details.dart';
 import 'package:ecompasscare/infrastructure/config.dart';
 import 'package:ecompasscare/infrastructure/navigation/routes.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -41,7 +42,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     speed: 0,
     speedAccuracy: 0,
   );
-  XFile? pickedImage;
+  File? pickedFile;
   ImageSource iSource = ImageSource.gallery;
 
   @override
@@ -112,7 +113,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
                       },
                     ),
                     ListTile(
-                      title: const Text("Take From Gallery"),
+                      title: const Text("Upload from Files"),
                       onTap: () async {
                         iSource = ImageSource.gallery;
                         Get.back();
@@ -122,29 +123,36 @@ class HomeController extends GetxController with NetworkStateMixin1 {
                 ),
               ),
             ),
-          ).then((value) async => {
-                pickedImage =
-                    (await ImagePicker().pickImage(source: iSource)) ??
-                        XFile('')
-              });
+          ).then(
+            (value) async => {
+              if (iSource == ImageSource.camera)
+                {
+                  pickedFile = File(
+                    (await ImagePicker().pickImage(source: iSource))?.path ??
+                        '',
+                  )
+                }
+              else
+                {
+                  pickedFile = File(
+                    (await FilePicker.platform.pickFiles())
+                            ?.files
+                            .single
+                            .path ??
+                        '',
+                  ),
+                }
+            },
+          );
 
-          if (pickedImage != null) {
-            return [File(pickedImage?.path ?? '').uri.toString()];
+          if (pickedFile != null) {
+            return [(pickedFile?.uri).toString()];
           } else {
             return [];
           }
         },
       );
     }
-
-    ///Adding Cookie
-    // await cookieManager.setCookie(
-    //   WebViewCookie(
-    //     name: 'is_mobile_app',
-    //     value: 'true',
-    //     domain: ConfigEnvironments.env['domain'],
-    //   ),
-    // );
   }
 
   initWebview() {
