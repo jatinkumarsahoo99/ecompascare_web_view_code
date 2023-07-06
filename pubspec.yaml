@@ -19,7 +19,6 @@ dependencies:
   url_launcher: ^6.1.10
   onesignal_flutter: ^3.5.1
   http: ^0.13.5
-  # file_picker: ^5.2.7
   shared_preferences: ^2.1.0
   syncfusion_flutter_pdfviewer: ^21.1.39
   firebase_database: ^10.1.1

@@ -5,7 +5,6 @@ import 'package:ecompasscare/dal/services/remote_db.dart';
 import 'package:ecompasscare/domain/entity/file_details.dart';
 import 'package:ecompasscare/infrastructure/config.dart';
 import 'package:ecompasscare/infrastructure/navigation/routes.dart';
-// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -42,7 +41,8 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     speed: 0,
     speedAccuracy: 0,
   );
-  File pickedImage = File('');
+  XFile? pickedImage;
+  ImageSource iSource = ImageSource.gallery;
 
   @override
   void onInit() async {
@@ -67,41 +67,6 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     timer?.cancel();
     super.dispose();
   }
-
-  openPicker(ImageSource source) async {
-    pickedImage = (await ImagePicker().pickImage(source: source)) as File;
-    Get.back();
-    debugPrint('##########');
-    debugPrint(pickedImage.toString());
-    debugPrint('##########');
-    return pickedImage;
-  }
-
-  openDialog(BuildContext context) {
-    debugPrint('statement');
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: Column(
-          children: [
-            ListTile(
-              title: const Text("Open Camera"),
-              onTap: () {
-                openPicker(ImageSource.camera);
-              },
-            ),
-            ListTile(
-              title: const Text("Take From Gallery"),
-              onTap: () {
-                openPicker(ImageSource.gallery);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-  // openDialog() {}
 
   initParams() async {
     prefs = await SharedPreferences.getInstance();
@@ -132,20 +97,42 @@ class HomeController extends GetxController with NetworkStateMixin1 {
       (webViewController.platform as AndroidWebViewController)
           .setOnShowFileSelector(
         (params) async {
-          debugPrint('FileSelector Clicked.........');
-          openDialog;
-          debugPrint('FileSelector Clicked Over.........');
+          await Get.bottomSheet(
+            Container(
+              height: 200,
+              color: Colors.white,
+              child: Center(
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: const Text("Open Camera"),
+                      onTap: () {
+                        iSource = ImageSource.camera;
+                        Get.back();
+                      },
+                    ),
+                    ListTile(
+                      title: const Text("Take From Gallery"),
+                      onTap: () async {
+                        iSource = ImageSource.gallery;
+                        Get.back();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ).then((value) async => {
+                pickedImage =
+                    (await ImagePicker().pickImage(source: iSource)) ??
+                        XFile('')
+              });
 
-          return [];
-
-          // ///TODO: Drop down and image picker
-          // FilePickerResult? result = await FilePicker.platform.pickFiles();
-          // if (result != null) {
-          //   file = File(result.files.single.path ?? '');
-          // } else {
-          //   return [];
-          // }
-          // return [(file?.uri).toString()];
+          if (pickedImage != null) {
+            return [File(pickedImage?.path ?? '').uri.toString()];
+          } else {
+            return [];
+          }
         },
       );
     }
@@ -159,15 +146,6 @@ class HomeController extends GetxController with NetworkStateMixin1 {
     //   ),
     // );
   }
-
-  // initNotification() {
-  //   String oneSignalAppId = ConfigEnvironments.env['OSAppId'];
-  //   debugPrint('calling init noti');
-  //   OneSignal.shared.setAppId(oneSignalAppId);
-  //   OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
-  //     //
-  //   });
-  // }
 
   initWebview() {
     webViewController
@@ -260,31 +238,6 @@ class HomeController extends GetxController with NetworkStateMixin1 {
               DateTime.now().toString())
           : Uri.parse(ConfigEnvironments.env['url']));
   }
-
-  // getLocation() async {
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     try {
-  //       permission = await Geolocator.requestPermission();
-  //     } catch (e) {
-  //       debugPrint(e.toString());
-  //     }
-  //     if (permission == LocationPermission.whileInUse ||
-  //         permission == LocationPermission.whileInUse && serviceEnabled) {
-  //       loc = await Geolocator.getCurrentPosition();
-  //       debugPrint('--------------\n1. $loc\n--------------');
-  //     } else {
-  //       debugPrint('--------------\nLocation Denied\n--------------');
-  //     }
-  //   } else if (permission == LocationPermission.always ||
-  //       permission == LocationPermission.whileInUse && serviceEnabled) {
-  //     loc = await Geolocator.getCurrentPosition();
-  //     debugPrint('--------------\n2. $loc\n--------------');
-  //   } else {
-  //     debugPrint('--------------\nPermission Denied\n--------------');
-  //   }
-  // }
 
   getLocation() async {
     permission = await Geolocator.checkPermission();
