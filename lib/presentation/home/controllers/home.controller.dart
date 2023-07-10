@@ -13,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
@@ -55,6 +56,9 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         const Duration(seconds: 5), (Timer t) => firstLoad.value = true);
     super.onInit();
   }
+
+  String DemoString = '';
+  final cookieManager1 = WebviewCookieManager();
 
   @override
   void onReady() async {
@@ -157,6 +161,19 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         },
       );
     }
+
+    ///Adding Cookie
+    // debugPrint('Adding COOKIES 1 TRY');
+    // try {
+    //   await cookieManager1.setCookies([
+    //     Cookie('is_mobile_app_test1', 'true')
+    //       ..domain = ConfigEnvironments.env['domain']
+    //       // ..expires = DateTime.now().add(Duration(days: 10))
+    //       ..httpOnly = false
+    //   ]);
+    // } catch (e) {
+    //   debugPrint('COOKIES ERROR : e');
+    // }
   }
 
   initWebview() {
@@ -194,6 +211,15 @@ class HomeController extends GetxController with NetworkStateMixin1 {
             ///TODO: Zoom fix;
             webViewController.runJavaScript(
                 'document.documentElement.style.zoom = ${1 / 1.0};');
+
+            // debugPrint('1START: COOKIES----------');
+            // final gotCookies = await cookieManager1
+            //     .getCookies(ConfigEnvironments.env['cookiedomain']);
+            // debugPrint('1COOKIES----------');
+            // for (var item in gotCookies) {
+            //   debugPrint(item.toString());
+            // }
+            // debugPrint('1END: COOKIES----------');
           },
           onWebResourceError: (WebResourceError error) {
             debugPrint(
@@ -326,6 +352,32 @@ class HomeController extends GetxController with NetworkStateMixin1 {
   }
 
   Future<void> onListCookies() async {
+    // debugPrint('START: COOKIES----------');
+    // final gotCookies =
+    //     await cookieManager1.getCookies(ConfigEnvironments.env['cookiedomain']);
+    // debugPrint('COOKIES----------');
+    // for (var item in gotCookies) {
+    //   debugPrint(item.toString());
+    // }
+    // debugPrint('END: COOKIES----------');
+
+    // try {
+    //   final cookies = await webViewController.runJavaScriptReturningResult(
+    //     'document.cookie',
+    //   );
+    //   debugPrint('COOKIES: $cookies');
+    // } catch (e) {
+    //   debugPrint('COOKIES Error $e');
+    // }
+
+    // try {
+    //   DemoString = await webViewController.runJavaScriptReturningResult(
+    //       "localStorage.getItem('mobileNumber')") as String;
+    //   debugPrint('COOKIES TOKEN TEST $DemoString------------------');
+    // } catch (e) {
+    //   debugPrint('Token Cookies Not Found!');
+    // }
+
     try {
       accessToken = await webViewController.runJavaScriptReturningResult(
           "localStorage.getItem('access_token')") as String;
@@ -343,7 +395,7 @@ class HomeController extends GetxController with NetworkStateMixin1 {
         await prefs.setString('loginToken', accessToken);
       }
     } catch (e) {
-      debugPrint('Cookies Not Found!');
+      debugPrint('Token Cookies Not Found!');
       accessToken = '';
       if (prefs.get('loginToken') != null) {
         //TODO: Call remove playerID API
