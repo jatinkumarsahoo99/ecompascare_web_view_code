@@ -16,7 +16,6 @@ class ConfigEnvironments {
       'domain': 'craftercms-delivery-dev.skill-mine.com',
       'baseAPI': 'https://ecompaascare-srv-dev.skill-mine.com/api',
       'OSAppId': '80786b47-31d8-4018-b284-5b5845b4bbb5',
-      // 'cookiedomain': 'https://craftercms-delivery-dev.skill-mine.com',
       'cookiedomain': 'https://ecompaascare-react-dev.skill-mine.com',
     },
     {
